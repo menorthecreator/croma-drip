@@ -1,0 +1,1448 @@
+/* =========================
+   RESET
+========================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+body {
+  width: 100%;
+
+  background: #000;
+  color: #fff;
+
+  font-family: "Montserrat", sans-serif;
+
+  overflow-x: hidden;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100px;
+
+  z-index: 100;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 55px;
+
+  /*
+    IMPORTANTE:
+    header totalmente transparente
+  */
+
+  background: transparent;
+}
+
+
+/* =========================
+   LOGO CENTRAL
+========================= */
+
+.logo-link {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  z-index: 2;
+}
+
+
+.logo {
+  width: 52px;
+  height: auto;
+
+  display: block;
+
+  object-fit: contain;
+}
+
+
+/* =========================
+   LADOS DO HEADER
+========================= */
+
+.header-left,
+.header-right {
+  display: flex;
+
+  align-items: center;
+
+  position: relative;
+
+  z-index: 3;
+}
+
+
+/* =========================
+   ÍCONES HEADER
+========================= */
+
+.header-right {
+  display: flex;
+  align-items: center;
+
+  gap: 24px;
+
+  position: relative;
+  z-index: 3;
+}
+
+
+.icon-button {
+  position: relative;
+
+  width: 23px;
+  height: 23px;
+
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #fff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+
+.icon-button svg {
+  width: 100%;
+  height: 100%;
+
+  fill: none;
+
+  stroke: currentColor;
+
+  stroke-width: 1.6;
+
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+.icon-button:hover {
+  opacity: 0.65;
+
+  transform: translateY(-2px);
+}
+
+
+/* CONTA UM POUCO MENOR */
+
+.account-icon {
+  width: 24px;
+  height: 24px;
+}
+
+
+/* CARRINHO */
+
+.cart-icon {
+  width: 25px;
+  height: 25px;
+}
+
+
+
+/* =========================
+   HAMBURGER
+========================= */
+
+.menu-button {
+  width: 28px;
+  height: 22px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+}
+
+
+.menu-button span {
+  display: block;
+
+  width: 100%;
+  height: 2px;
+
+  background: #fff;
+
+  border-radius: 20px;
+}
+
+/* =========================
+   VÍDEO DE FUNDO
+========================= */
+
+.hero-video {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  z-index: 1;
+}
+/* =========================
+   HERO
+========================= */
+
+.hero {
+  position: relative;
+
+  width: 100%;
+
+  /*
+    Agora ocupa a tela TODA.
+    Não descontamos mais o header.
+  */
+
+  height: 100vh;
+  height: 100svh;
+
+  min-height: 600px;
+
+  overflow: hidden;
+
+  background: #000;
+}
+
+
+/* =========================
+   CARROSSEL
+========================= */
+
+.carousel {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+}
+
+
+.slide {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  transition:
+    opacity 1.4s ease,
+    visibility 1.4s ease;
+
+  z-index: 0;
+}
+
+
+.slide.active {
+  opacity: 1;
+
+  visibility: visible;
+
+  z-index: 1;
+}
+
+
+.slide img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  object-position: center;
+
+  display: block;
+
+  transform: scale(1);
+
+  transition:
+    transform 7s ease;
+}
+
+
+.slide.active img {
+  transform: scale(1.035);
+}
+
+
+/* =========================
+   ESCURECIMENTO DA FOTO
+========================= */
+
+.hero::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 2;
+
+  pointer-events: none;
+
+  /*
+    Dá contraste para logo,
+    ícones e botão.
+  */
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.32) 0%,
+      rgba(0, 0, 0, 0.05) 30%,
+      rgba(0, 0, 0, 0.03) 60%,
+      rgba(0, 0, 0, 0.30) 100%
+    );
+}
+
+
+/* =========================
+   CONTEÚDO CENTRAL
+========================= */
+
+.hero-content {
+  position: absolute;
+
+  left: 50%;
+  top: 59%;
+
+  transform: translate(-50%, -50%);
+
+  z-index: 10;
+}
+
+
+/* =========================
+   VER CATÁLOGO
+========================= */
+
+.catalog-button {
+  width: 210px;
+  height: 62px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background:
+    rgba(0, 0, 0, 0.12);
+
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.9);
+
+  /*
+    laterais arredondadas
+  */
+  border-radius: 999px;
+
+  color: #fff;
+
+  font-family:
+    "Montserrat",
+    sans-serif;
+
+  font-size: 14px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.3px;
+
+  text-decoration: none;
+
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease,
+    border-color 0.3s ease;
+}
+
+
+.catalog-button:hover {
+  background: #fff;
+
+  color: #000;
+
+  border-color: #fff;
+
+  transform: scale(1.03);
+}
+
+
+/* =========================
+   INDICADORES
+========================= */
+
+.carousel-dots {
+  position: absolute;
+
+  bottom: 32px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  z-index: 10;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+}
+
+
+.dot {
+  width: 6px;
+  height: 6px;
+
+  border: none;
+
+  padding: 0;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 255, 255, 0.45);
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+
+.dot.active {
+  width: 31px;
+
+  border-radius: 20px;
+
+  background: #fff;
+}
+
+
+/* =========================
+   CATÁLOGO
+========================= */
+
+.catalogo {
+  width: 100%;
+  min-height: 100vh;
+
+  background: #f5f5f3;
+  color: #111;
+
+  padding: 90px 70px 120px;
+}
+
+
+/* =========================
+   CABEÇALHO
+========================= */
+
+.catalog-header {
+  width: 100%;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  padding-bottom: 22px;
+  margin-bottom: 48px;
+
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+
+.catalog-kicker {
+  display: block;
+
+  margin-bottom: 10px;
+
+  font-size: 10px;
+  font-weight: 500;
+
+  letter-spacing: 2.5px;
+
+  color: #777;
+}
+
+
+.catalog-header h2 {
+  font-size: 32px;
+  line-height: 1;
+
+  font-weight: 700;
+
+  letter-spacing: -1px;
+}
+
+
+/* =========================
+   GRID
+========================= */
+
+.products-grid {
+  width: 100%;
+
+  display: grid;
+
+  /*
+    igual catálogo grande:
+    4 colunas no desktop
+  */
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 70px 34px;
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.product-card {
+  width: 100%;
+}
+
+.product-card-link {
+  display: block;
+  width: 100%;
+
+  color: #111;
+  text-decoration: none;
+
+  cursor: pointer;
+}
+
+.product-card-link:visited {
+  color: #111;
+  text-decoration: none;
+}
+
+.product-card-link:hover {
+  color: #111;
+  text-decoration: none;
+}
+
+.product-card-link:active {
+  color: #111;
+  text-decoration: none;
+}
+
+
+/* =========================
+   ÁREA DA FOTO
+========================= */
+
+.product-image-container {
+  display: block;
+
+  width: 100%;
+
+  text-decoration: none;
+
+  color: inherit;
+}
+
+
+.product-viewer {
+  width: 100%;
+
+  /*
+    deixa bem parecido com
+    aquele quadrado do catálogo
+  */
+
+  aspect-ratio: 1.15 / 1;
+
+  position: relative;
+
+  overflow: hidden;
+
+  background: #eeeeec;
+
+  cursor: ew-resize;
+}
+
+
+/* =========================
+   PRODUTO
+========================= */
+
+.product-image {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  /*
+    ISSO aqui é o principal:
+    o produto não ocupa tudo
+  */
+
+  width: 72%;
+  height: 72%;
+
+  object-fit: contain;
+
+  transform:
+    translate(-50%, -50%)
+    scale(1);
+
+  opacity: 1;
+
+  transition:
+    opacity 0.12s ease,
+    transform 0.45s
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+
+  pointer-events: none;
+
+  user-select: none;
+}
+
+
+.product-viewer:hover
+.product-image {
+  transform:
+    translate(-50%, -50%)
+    scale(1.035);
+}
+
+
+/* =========================
+   AVISO DO VIEWER
+========================= */
+
+.viewer-helper {
+  position: absolute;
+
+  left: 50%;
+  bottom: 14px;
+
+  transform:
+    translateX(-50%)
+    translateY(5px);
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  font-size: 7px;
+
+  font-weight: 600;
+
+  letter-spacing: 1.3px;
+
+  color:
+    rgba(0, 0, 0, 0.4);
+
+  white-space: nowrap;
+
+  opacity: 0;
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+
+.product-viewer:hover
+.viewer-helper {
+  opacity: 1;
+
+  transform:
+    translateX(-50%)
+    translateY(0);
+}
+
+
+/* =========================
+   INFO DO PRODUTO
+========================= */
+
+.product-info {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  padding-top: 15px;
+}
+
+
+.product-text {
+  color: #111;
+}
+
+.product-text h3 {
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: #111;
+}
+
+.product-text p {
+  font-size: 11px;
+  font-weight: 500;
+  color: #333;
+}
+
+.product-text-link {
+  color: #111;
+  text-decoration: none;
+}
+
+.product-text-link:visited {
+  color: #111;
+}
+
+.product-text-link:hover {
+  color: #111;
+  text-decoration: none;
+}
+
+.product-text-link:active {
+  color: #111;
+}
+
+
+/* =========================
+   BOTÃO SACOLA
+========================= */
+
+.add-product {
+  width: 42px;
+  height: 42px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: #fff;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 22px
+    rgba(0, 0, 0, 0.05);
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease;
+}
+
+
+.add-product svg {
+  width: 18px;
+  height: 18px;
+}
+
+
+.add-product:hover {
+  background: #111;
+
+  color: #fff;
+
+  transform:
+    translateY(-2px);
+}
+
+
+/* ==================================================
+   RESPONSIVIDADE GERAL
+================================================== */
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1024px) {
+
+  /* HEADER */
+
+  .header {
+    height: 82px;
+    padding: 0 30px;
+  }
+
+  .logo {
+    width: 44px;
+  }
+
+  .header-right {
+    gap: 18px;
+  }
+
+  .icon-button {
+    width: 22px;
+    height: 22px;
+  }
+
+
+  /* HERO */
+
+  .hero {
+    height: 100svh;
+    min-height: 600px;
+  }
+
+  .hero-video {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .hero-content {
+    top: 62%;
+  }
+
+  .catalog-button {
+    width: 190px;
+    height: 58px;
+
+    font-size: 13px;
+  }
+
+
+  /* CATÁLOGO */
+
+  .catalogo {
+    padding:
+      75px
+      35px
+      100px;
+  }
+
+  .catalog-header {
+    margin-bottom: 40px;
+  }
+
+  .products-grid {
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+
+    gap: 55px 24px;
+  }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+  /* HEADER */
+
+  .header {
+    height: 70px;
+
+    padding:
+      0
+      18px;
+  }
+
+  .logo {
+    width: 36px;
+  }
+
+  .header-right {
+    gap: 14px;
+  }
+
+  .icon-button {
+    width: 20px;
+    height: 20px;
+  }
+
+  .menu-button {
+    width: 24px;
+  }
+
+
+  /* HERO */
+
+  .hero {
+    width: 100%;
+    height: 100svh;
+    min-height: 560px;
+  }
+
+  .hero-video {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+  }
+
+
+  .hero::before {
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.35) 0%,
+        rgba(0, 0, 0, 0.04) 35%,
+        rgba(0, 0, 0, 0.08) 65%,
+        rgba(0, 0, 0, 0.42) 100%
+      );
+  }
+
+
+  /* BOTÃO */
+
+  .hero-content {
+    top: 65%;
+  }
+
+  .catalog-button {
+    width: 170px;
+    height: 52px;
+
+    font-size: 11px;
+
+    border-radius: 999px;
+  }
+
+
+  /* CATÁLOGO */
+
+  .catalogo {
+    min-height: auto;
+
+    padding:
+      65px
+      16px
+      90px;
+  }
+
+  .catalog-header {
+    margin-bottom: 30px;
+    padding-bottom: 18px;
+  }
+
+  .catalog-kicker {
+    font-size: 8px;
+    letter-spacing: 2px;
+  }
+
+  .catalog-header h2 {
+    font-size: 27px;
+    letter-spacing: -1px;
+  }
+
+
+  .products-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap:
+      45px
+      12px;
+  }
+
+
+  /* CARD */
+
+  .product-viewer {
+    aspect-ratio: 1 / 1.08;
+
+    /* mobile vira card normal */
+    cursor: pointer;
+  }
+
+  .product-image {
+    width: 82%;
+    height: 82%;
+  }
+
+  .product-info {
+    padding-top: 11px;
+  }
+
+  .product-text h3 {
+    font-size: 9px;
+    margin-bottom: 4px;
+  }
+
+  .product-text p {
+    font-size: 9px;
+  }
+
+  .add-product {
+    width: 34px;
+    height: 34px;
+  }
+
+  .add-product svg {
+    width: 15px;
+    height: 15px;
+  }
+
+
+  /* NO MOBILE NÃO TEM "MOVA PARA VER" */
+
+  .viewer-helper {
+    display: none;
+  }
+
+}
+
+
+/* =========================
+   CELULAR PEQUENO
+========================= */
+
+@media (max-width: 400px) {
+
+  .header {
+    padding:
+      0
+      14px;
+  }
+
+  .header-right {
+    gap: 11px;
+  }
+
+  .catalog-button {
+    width: 158px;
+    height: 49px;
+
+    font-size: 10px;
+  }
+
+  .catalogo {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .products-grid {
+    gap: 35px 9px;
+  }
+
+}
+
+/* =========================
+   ESCONDER SCROLLBAR
+========================= */
+
+html {
+  scrollbar-width: none;
+}
+
+body {
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* =========================
+   PRODUTO ESGOTADO
+========================= */
+
+.product-card {
+  position: relative;
+}
+
+
+/* TAG ESGOTADO */
+
+.sold-out-label {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+
+  z-index: 10;
+
+  padding: 7px 11px;
+
+  background: #111;
+  color: #fff;
+
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+  line-height: 1;
+
+  pointer-events: none;
+}
+
+
+/* FOTO DO PRODUTO ESGOTADO */
+
+.product-card.is-sold-out .product-image {
+  opacity: 0.62 !important;
+}
+
+
+/* BOTÃO DESATIVADO */
+
+.product-card.is-sold-out .add-product {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+  .sold-out-label {
+    top: 9px;
+    left: 9px;
+
+    padding: 6px 8px;
+
+    font-size: 7px;
+    letter-spacing: 1px;
+  }
+
+}
+
+/* ==================================================
+   FOOTER
+================================================== */
+
+.site-footer {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 28px 34px;
+
+  border-top: 1px solid #dededb;
+
+  background: #f6f6f4;
+  color: #111;
+}
+
+
+/* CROMA DRIP © 2026 */
+
+.footer-copyright {
+  margin: 0;
+
+  font-size: 8px;
+  font-weight: 500;
+
+  letter-spacing: 1.5px;
+
+  white-space: nowrap;
+}
+
+
+/* DESENVOLVIDO POR */
+
+.footer-developer {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+}
+
+.footer-developer span {
+  font-size: 8px;
+  font-weight: 500;
+
+  letter-spacing: 1.5px;
+
+  white-space: nowrap;
+}
+
+
+/* SELO DG */
+
+.footer-developer img {
+  width: 68px;
+}
+
+.footer-developer {
+  gap: 14px;
+}
+
+/* HOVER SUTIL */
+
+.footer-developer:hover img {
+  transform: translateY(-2px);
+}
+
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 700px) {
+
+  .site-footer {
+    padding: 22px 18px;
+
+    gap: 20px;
+  }
+
+  .footer-copyright {
+    font-size: 7px;
+
+    letter-spacing: 1px;
+  }
+
+  .footer-developer {
+    gap: 8px;
+  }
+
+  .footer-developer span {
+    font-size: 7px;
+
+    letter-spacing: 1px;
+  }
+
+  .footer-developer img {
+    width: 48px;
+  }
+
+}
+
+
+/* MOBILE PEQUENO */
+
+@media (max-width: 430px) {
+
+  .site-footer {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 16px;
+  }
+
+}
+/* ==================================================
+   RESPONSIVO FINAL — CROMA DRIP
+================================================== */
+
+@media (max-width: 1024px) {
+  .catalogo { padding-left: 28px; padding-right: 28px; }
+  .products-grid { gap: 48px 22px; }
+}
+
+@media (max-width: 700px) {
+  .header { height: 68px; padding-left: 16px; padding-right: 16px; }
+  .header-right { gap: 13px; }
+  .logo { width: 35px; }
+
+  .hero { height: 100svh; min-height: 520px; }
+  .hero-content { top: 63%; }
+  .catalog-button { width: 164px; height: 50px; font-size: 10px; }
+  .carousel-dots { bottom: 22px; }
+
+  .catalogo { padding: 52px 14px 72px; }
+  .catalog-header { margin-bottom: 24px; padding-bottom: 15px; }
+  .catalog-kicker { margin-bottom: 8px; }
+  .catalog-header h2 { font-size: 25px; }
+  .products-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 10px; }
+
+  .product-viewer { aspect-ratio: 1 / 1.06; }
+  .product-image { width: 80%; height: 80%; }
+  .product-info { gap: 8px; padding-top: 10px; }
+  .product-text { min-width: 0; }
+  .product-text h3 {
+    overflow: hidden;
+    margin-bottom: 4px;
+    font-size: 9px;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .product-text p { font-size: 9px; line-height: 1.25; }
+  .add-product { width: 32px; height: 32px; flex: 0 0 32px; }
+  .add-product svg { width: 14px; height: 14px; }
+
+  .sold-out-label { top: 8px; left: 8px; padding: 5px 7px; font-size: 6px; letter-spacing: .9px; }
+
+  .site-footer { padding: 20px 16px; gap: 14px; }
+  .footer-copyright,
+  .footer-developer span { font-size: 6px; letter-spacing: .9px; }
+  .footer-developer { gap: 8px; }
+  .footer-developer img { width: 46px; }
+}
+
+@media (max-width: 430px) {
+  .header { padding-left: 14px; padding-right: 14px; }
+  .header-right { gap: 11px; }
+  .catalogo { padding: 46px 11px 64px; }
+  .products-grid { gap: 32px 8px; }
+
+  .site-footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-developer { flex-shrink: 0; }
+}
+
+@media (max-width: 350px) {
+  .account-icon { display: none; }
+  .header-right { gap: 10px; }
+  .catalogo { padding-left: 9px; padding-right: 9px; }
+  .products-grid { gap: 28px 7px; }
+  .product-text h3,
+  .product-text p { font-size: 8px; }
+  .add-product { width: 30px; height: 30px; flex-basis: 30px; }
+  .site-footer { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
+
+
+/* ==================================================
+   CROMA DRIP — AJUSTE FINAL
+   CATÁLOGO IMERSIVO NO MOBILE
+================================================== */
+
+@media (max-width: 700px) {
+
+  .catalogo {
+    width: 100%;
+    min-height: 100svh;
+
+    display: flex;
+    flex-direction: column;
+
+    padding:
+      52px
+      14px
+      72px;
+  }
+
+  .catalog-header {
+    width: 100%;
+
+    margin-bottom: 24px;
+    padding-bottom: 15px;
+  }
+
+  .catalog-kicker {
+    margin-bottom: 8px;
+
+    font-size: 8px;
+    letter-spacing: 2px;
+  }
+
+  .catalog-header h2 {
+    font-size: 25px;
+    letter-spacing: -1px;
+  }
+
+  .products-grid {
+    width: 100%;
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap:
+      36px
+      10px;
+  }
+
+}
+
+
+@media (max-width: 430px) {
+
+  .catalogo {
+    min-height: 100svh;
+
+    padding:
+      46px
+      11px
+      64px;
+  }
+
+  .products-grid {
+    gap:
+      32px
+      8px;
+  }
+
+}

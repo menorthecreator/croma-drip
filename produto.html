@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Croma Drip</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="css/produto.css">
+  <link rel="stylesheet" href="css/cart.css">
+  <link rel="stylesheet" href="css/search.css">
+</head>
+
+<body>
+
+
+  <!-- =========================
+       HEADER
+  ========================== -->
+
+  <header class="product-header">
+
+    <a
+      href="index.html"
+      class="back-button"
+      aria-label="Voltar"
+    >
+      ←
+    </a>
+
+
+    <a
+      href="index.html"
+      class="product-logo"
+    >
+
+      <img
+        src="assets/logo.png"
+        alt="Croma Drip"
+      >
+
+    </a>
+
+
+    <div class="product-header-icons">
+
+
+      <!-- PESQUISA -->
+
+      <button
+        class="header-icon"
+        data-open-search
+        aria-label="Pesquisar"
+      >
+
+        <svg viewBox="0 0 24 24">
+
+          <circle
+            cx="10.5"
+            cy="10.5"
+            r="6.5"
+          ></circle>
+
+          <path
+            d="M15.5 15.5L21 21"
+          ></path>
+
+        </svg>
+
+      </button>
+
+
+      <!-- CARRINHO -->
+
+      <button
+        class="header-icon cart-icon"
+        id="openCart"
+        aria-label="Abrir carrinho"
+      >
+
+        <svg viewBox="0 0 24 24">
+
+          <path
+            d="M3 4h2l2.1 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L20 8H6"
+          ></path>
+
+          <circle
+            cx="9"
+            cy="20"
+            r="1"
+          ></circle>
+
+          <circle
+            cx="18"
+            cy="20"
+            r="1"
+          ></circle>
+
+        </svg>
+
+
+        <span
+          class="cart-count"
+          id="cartCount"
+        >
+          0
+        </span>
+
+      </button>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- =========================
+       PRODUTO
+  ========================== -->
+
+  <main class="product-page">
+
+
+    <!-- =========================
+         GALERIA
+    ========================== -->
+
+    <section class="product-gallery">
+
+
+      <div class="gallery-main">
+
+        <img
+          id="mainProductImage"
+          src=""
+          alt=""
+        >
+
+      </div>
+
+
+      <div
+        class="gallery-thumbnails"
+        id="productThumbnails"
+      ></div>
+
+    </section>
+
+
+
+    <!-- =========================
+         INFORMAÇÕES
+    ========================== -->
+
+    <section class="product-details">
+
+
+      <p
+        class="product-category"
+        id="productCategory"
+      ></p>
+
+
+      <h1 id="productName"></h1>
+
+
+      <p
+        class="product-price"
+        id="productPrice"
+      ></p>
+
+
+      <div class="product-divider"></div>
+
+
+
+      <!-- =========================
+           TAMANHO
+      ========================== -->
+
+      <div class="product-option">
+
+
+        <div class="option-header">
+
+          <span>
+            TAMANHO
+          </span>
+
+          <span
+            class="selected-size"
+            id="selectedSize"
+          >
+            -
+          </span>
+
+        </div>
+
+
+        <div
+          class="sizes"
+          id="productSizes"
+        ></div>
+
+      </div>
+
+
+
+      <!-- =========================
+           QUANTIDADE
+      ========================== -->
+
+      <div class="quantity-wrapper">
+
+        <span>
+          QUANTIDADE
+        </span>
+
+
+        <div class="quantity">
+
+          <button
+            id="minusButton"
+            type="button"
+            aria-label="Diminuir quantidade"
+          >
+            −
+          </button>
+
+
+          <span id="quantityValue">
+            1
+          </span>
+
+
+          <button
+            id="plusButton"
+            type="button"
+            aria-label="Aumentar quantidade"
+          >
+            +
+          </button>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- =========================
+           BOTÕES
+      ========================== -->
+
+      <button
+        class="buy-button"
+        id="addToCartProduct"
+        type="button"
+      >
+        ADICIONAR AO CARRINHO
+      </button>
+
+
+      <a
+        href="#"
+        class="whatsapp-button"
+        id="whatsappButton"
+      >
+        COMPRAR PELO WHATSAPP
+      </a>
+
+
+
+      <!-- =========================
+           DESCRIÇÃO
+      ========================== -->
+
+      <div class="product-description">
+
+
+        <button
+          class="description-toggle"
+          type="button"
+        >
+
+          <span>
+            DESCRIÇÃO
+          </span>
+
+          <span class="description-plus">
+            +
+          </span>
+
+        </button>
+
+
+        <div
+          class="description-content"
+          id="descriptionContent"
+        ></div>
+
+      </div>
+
+
+
+      <!-- =========================
+           INSTAGRAM
+      ========================== -->
+
+      <a
+        href="#"
+        class="instagram-link"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        VER NO INSTAGRAM ↗
+      </a>
+
+
+    </section>
+
+  </main>
+
+
+
+  <!-- ==================================================
+       OVERLAY DO CARRINHO
+  =================================================== -->
+
+  <div
+    class="cart-overlay"
+    id="cartOverlay"
+  ></div>
+
+
+
+  <!-- ==================================================
+       CARRINHO
+  =================================================== -->
+
+  <aside
+    class="cart-drawer"
+    id="cartDrawer"
+    aria-label="Carrinho de compras"
+  >
+
+
+    <!-- HEADER -->
+
+    <div class="cart-header">
+
+      <div>
+
+        <span class="cart-kicker">
+          SEU PEDIDO
+        </span>
+
+        <h2>
+          CARRINHO
+        </h2>
+
+      </div>
+
+
+      <button
+        class="close-cart"
+        id="closeCart"
+        type="button"
+        aria-label="Fechar carrinho"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+
+    <!-- =========================
+         FRETE GRÁTIS
+    ========================== -->
+
+    <div class="shipping-goal">
+
+
+      <div class="shipping-goal-text">
+
+        <span>
+          FRETE GRÁTIS
+        </span>
+
+        <strong id="freeShippingGoalValue">
+          R$ 499
+        </strong>
+
+      </div>
+
+
+      <p id="shippingMessage">
+        Faltam R$ 499,00 para frete grátis
+      </p>
+
+
+      <div class="shipping-progress">
+
+        <div
+          class="shipping-progress-bar"
+          id="shippingProgressBar"
+        ></div>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         ITENS
+    ========================== -->
+
+    <div
+      class="cart-items"
+      id="cartItems"
+    >
+
+
+      <div
+        class="empty-cart"
+        id="emptyCart"
+      >
+
+        <p>
+          Seu carrinho está vazio.
+        </p>
+
+
+        <button
+          class="continue-shopping"
+          id="continueShopping"
+          type="button"
+        >
+          CONTINUAR COMPRANDO
+        </button>
+
+      </div>
+
+
+    </div>
+
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <div class="cart-footer">
+
+
+      <div class="cart-total">
+
+        <span>
+          SUBTOTAL
+        </span>
+
+        <strong id="cartSubtotal">
+          R$ 0,00
+        </strong>
+
+      </div>
+
+
+      <p class="shipping-note">
+        Frete calculado durante o atendimento pelo WhatsApp.
+      </p>
+
+
+      <button
+        class="cart-whatsapp"
+        id="cartWhatsapp"
+        type="button"
+        disabled
+      >
+        FINALIZAR PELO WHATSAPP
+      </button>
+
+
+      <button
+        class="continue-shopping-footer"
+        id="continueShoppingFooter"
+        type="button"
+      >
+        CONTINUAR COMPRANDO
+      </button>
+
+
+    </div>
+
+  </aside>
+
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================== -->
+
+<script src="js/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/search.js"></script>
+<script src="js/produto.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,1089 @@
+/* =========================
+   RESET
+========================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #f5f5f3;
+  color: #111;
+
+  font-family:
+    "Montserrat",
+    sans-serif;
+
+  overflow-x: hidden;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.product-header {
+  position: relative;
+
+  width: 100%;
+  height: 90px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 50px;
+
+  background: #f5f5f3;
+
+  border-bottom:
+    1px solid
+    rgba(0, 0, 0, 0.08);
+
+  z-index: 100;
+}
+
+.product-logo {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform:
+    translate(-50%, -50%);
+}
+
+.product-logo img {
+  display: block;
+
+  width: 44px;
+  height: auto;
+}
+
+.back-button {
+  color: #111;
+
+  font-size: 26px;
+
+  text-decoration: none;
+
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.back-button:hover {
+  opacity: 0.55;
+
+  transform:
+    translateX(-4px);
+}
+
+.product-header-icons {
+  display: flex;
+  align-items: center;
+
+  gap: 22px;
+}
+
+.header-icon {
+  width: 22px;
+  height: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+.header-icon:hover {
+  opacity: 0.55;
+
+  transform:
+    translateY(-2px);
+}
+
+.header-icon svg {
+  width: 100%;
+  height: 100%;
+
+  fill: none;
+
+  stroke: #111;
+
+  stroke-width: 1.6;
+
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+/* =========================
+   PAGE
+========================= */
+
+.product-page {
+  width: 100%;
+
+  min-height:
+    calc(100vh - 90px);
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.35fr)
+    minmax(360px, 0.65fr);
+}
+
+
+/* =========================
+   GALERIA
+========================= */
+
+.product-gallery {
+  padding:
+    45px
+    40px
+    60px
+    60px;
+}
+
+.gallery-main {
+  width: 100%;
+
+  height:
+    calc(100vh - 210px);
+
+  min-height: 560px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background: #ededeb;
+}
+
+.gallery-main img {
+  width: 64%;
+  height: 64%;
+
+  object-fit: contain;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.4s ease;
+
+  user-select: none;
+}
+
+.gallery-main:hover img {
+  transform:
+    scale(1.025);
+}
+
+
+/* =========================
+   MINIATURAS
+========================= */
+
+.gallery-thumbnails {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 12px;
+
+  margin-top: 12px;
+}
+
+.thumbnail {
+  height: 105px;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    transparent;
+
+  background: #ededeb;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  padding: 12px;
+
+  user-select: none;
+}
+
+.thumbnail:hover {
+  opacity: 0.7;
+}
+
+.thumbnail.active {
+  border-color: #111;
+}
+
+
+/* =========================
+   DETAILS
+========================= */
+
+.product-details {
+  width: 100%;
+
+  max-width: 600px;
+
+  padding:
+    100px
+    70px
+    70px
+    50px;
+}
+
+.product-category {
+  margin-bottom: 14px;
+
+  color: #777;
+
+  font-size: 9px;
+  font-weight: 500;
+
+  letter-spacing: 2.5px;
+}
+
+.product-details h1 {
+  font-size:
+    clamp(
+      34px,
+      3.6vw,
+      52px
+    );
+
+  font-weight: 600;
+
+  letter-spacing: -2px;
+
+  line-height: 1;
+}
+
+.product-price {
+  margin-top: 18px;
+
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.product-divider {
+  margin: 28px 0;
+}
+
+
+/* =========================
+   TAMANHOS
+========================= */
+
+.product-option {
+  margin-bottom: 32px;
+}
+
+.option-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 15px;
+
+  font-size: 10px;
+
+  letter-spacing: 1px;
+}
+
+.selected-size {
+  color: #777;
+}
+
+.sizes {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 10px;
+}
+
+.size-button {
+  min-width: 75px;
+  height: 42px;
+
+  padding: 0 18px;
+
+  border:
+    1px solid
+    rgba(0, 0, 0, 0.25);
+
+  background: transparent;
+
+  color: #111;
+
+  font-family: inherit;
+
+  font-size: 10px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.size-button:hover {
+  border-color: #111;
+}
+
+.size-button.active {
+  border-color: #111;
+
+  background: #111;
+
+  color: #fff;
+}
+
+.size-button:disabled {
+  opacity: 0.35;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================
+   QUANTIDADE
+========================= */
+
+.quantity-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 30px;
+
+  font-size: 10px;
+
+  letter-spacing: 1px;
+}
+
+.quantity {
+  width: 115px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 14px;
+
+  border:
+    1px solid
+    rgba(0, 0, 0, 0.2);
+}
+
+.quantity button {
+  border: 0;
+
+  background: transparent;
+
+  color: #111;
+
+  font-family: inherit;
+
+  font-size: 19px;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.2s ease;
+}
+
+.quantity button:hover {
+  opacity: 0.45;
+}
+
+.quantity button:disabled {
+  opacity: 0.25;
+
+  cursor: not-allowed;
+}
+
+#quantityValue {
+  font-size: 11px;
+}
+
+
+/* =========================
+   CTA
+========================= */
+
+.buy-button,
+.whatsapp-button {
+  width: 100%;
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: inherit;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: 0.8px;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.buy-button {
+  margin-bottom: 10px;
+
+  border:
+    1px solid
+    #111;
+
+  background: #111;
+
+  color: #fff;
+}
+
+.buy-button:hover:not(:disabled) {
+  background: #333;
+}
+
+.buy-button:disabled {
+  opacity: 0.35;
+
+  cursor: not-allowed;
+}
+
+.whatsapp-button {
+  border:
+    1px solid
+    rgba(0, 0, 0, 0.3);
+
+  background: transparent;
+
+  color: #111;
+}
+
+.whatsapp-button:hover {
+  background: #111;
+
+  color: #fff;
+}
+
+
+/* =========================
+   DESCRIÇÃO
+========================= */
+
+.product-description {
+  margin-top: 40px;
+
+  border-top:
+    1px solid
+    rgba(0, 0, 0, 0.12);
+
+  border-bottom:
+    1px solid
+    rgba(0, 0, 0, 0.12);
+}
+
+.description-toggle {
+  width: 100%;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #111;
+
+  font-family: inherit;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  letter-spacing: 1px;
+
+  cursor: pointer;
+}
+
+.description-plus {
+  font-size: 20px;
+  font-weight: 300;
+
+  transition:
+    transform 0.3s ease;
+}
+
+.product-description.open
+.description-plus {
+  transform:
+    rotate(45deg);
+}
+
+.description-content {
+  max-height: 0;
+
+  overflow: hidden;
+
+  opacity: 0;
+
+  transition:
+    max-height 0.5s ease,
+    opacity 0.3s ease;
+}
+
+.product-description.open
+.description-content {
+  max-height: 400px;
+
+  padding-bottom: 25px;
+
+  opacity: 1;
+}
+
+.description-content p {
+  margin-bottom: 12px;
+
+  color: #555;
+
+  font-size: 11px;
+
+  line-height: 1.7;
+}
+
+.description-content ul {
+  margin-left: 16px;
+
+  color: #555;
+
+  font-size: 10px;
+
+  line-height: 1.9;
+}
+
+
+/* =========================
+   INSTAGRAM
+========================= */
+
+.instagram-link {
+  display: inline-block;
+
+  margin-top: 30px;
+
+  padding-bottom: 4px;
+
+  border-bottom:
+    1px solid
+    #111;
+
+  color: #111;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  letter-spacing: 1px;
+
+  text-decoration: none;
+
+  transition:
+    opacity 0.2s ease;
+}
+
+.instagram-link:hover {
+  opacity: 0.5;
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1050px) {
+
+  .product-header {
+    height: 82px;
+
+    padding:
+      0
+      30px;
+  }
+
+  .product-page {
+    min-height:
+      calc(100vh - 82px);
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(330px, 0.9fr);
+  }
+
+  .product-gallery {
+    padding:
+      32px
+      20px
+      45px
+      28px;
+  }
+
+  .gallery-main {
+    height:
+      calc(100vh - 180px);
+
+    min-height: 480px;
+  }
+
+  .gallery-main img {
+    width: 70%;
+    height: 70%;
+  }
+
+  .product-details {
+    padding:
+      65px
+      32px
+      60px
+      32px;
+  }
+
+  .product-details h1 {
+    font-size:
+      clamp(
+        32px,
+        4vw,
+        42px
+      );
+
+    letter-spacing: -1.5px;
+  }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 750px) {
+
+  /* HEADER */
+
+  .product-header {
+    height: 68px;
+
+    padding:
+      0
+      16px;
+  }
+
+  .product-logo img {
+    width: 35px;
+  }
+
+  .back-button {
+    font-size: 23px;
+  }
+
+  .product-header-icons {
+    gap: 14px;
+  }
+
+  .header-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+
+  /* PAGE */
+
+  .product-page {
+    display: block;
+
+    min-height: auto;
+  }
+
+
+  /* GALERIA IMERSIVA */
+
+  .product-gallery {
+    padding: 0;
+  }
+
+  .gallery-main {
+    width: 100%;
+
+    height:
+      calc(100svh - 68px);
+
+    min-height: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ededeb;
+  }
+
+  .gallery-main img {
+    width: 82%;
+    height: 82%;
+
+    object-fit: contain;
+  }
+
+  .gallery-main:hover img {
+    transform: none;
+  }
+
+
+  /* MINIATURAS */
+
+  .gallery-thumbnails {
+    grid-template-columns:
+      repeat(3, 1fr);
+
+    gap: 4px;
+
+    margin-top: 4px;
+
+    padding:
+      0
+      4px;
+  }
+
+  .thumbnail {
+    height: 82px;
+  }
+
+  .thumbnail img {
+    padding: 8px;
+  }
+
+
+  /* DETALHES */
+
+  .product-details {
+    max-width: none;
+
+    padding:
+      36px
+      18px
+      58px;
+  }
+
+  .product-category {
+    margin-bottom: 10px;
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+  }
+
+  .product-details h1 {
+    font-size: 31px;
+
+    letter-spacing: -1.3px;
+
+    line-height: 1.02;
+  }
+
+  .product-price {
+    margin-top: 12px;
+
+    font-size: 14px;
+  }
+
+  .product-divider {
+    margin: 22px 0;
+  }
+
+
+  /* TAMANHO */
+
+  .product-option {
+    margin-bottom: 24px;
+  }
+
+  .option-header {
+    margin-bottom: 11px;
+
+    font-size: 8px;
+
+    letter-spacing: 0.9px;
+  }
+
+  .sizes {
+    gap: 8px;
+  }
+
+  .size-button {
+    min-width: 68px;
+    height: 38px;
+
+    padding:
+      0
+      14px;
+
+    font-size: 9px;
+  }
+
+
+  /* QUANTIDADE */
+
+  .quantity-wrapper {
+    margin-bottom: 24px;
+
+    font-size: 8px;
+
+    letter-spacing: 0.9px;
+  }
+
+  .quantity {
+    width: 102px;
+    height: 38px;
+
+    padding:
+      0
+      12px;
+  }
+
+  .quantity button {
+    font-size: 17px;
+  }
+
+  #quantityValue {
+    font-size: 10px;
+  }
+
+
+  /* BOTÕES */
+
+  .buy-button,
+  .whatsapp-button {
+    height: 52px;
+
+    font-size: 9px;
+
+    letter-spacing: 0.7px;
+  }
+
+
+  /* DESCRIÇÃO */
+
+  .product-description {
+    margin-top: 30px;
+  }
+
+  .description-toggle {
+    height: 54px;
+
+    font-size: 9px;
+  }
+
+  .description-plus {
+    font-size: 18px;
+  }
+
+  .description-content p {
+    font-size: 10px;
+
+    line-height: 1.65;
+  }
+
+  .description-content ul {
+    font-size: 9px;
+
+    line-height: 1.8;
+  }
+
+  .product-description.open
+  .description-content {
+    padding-bottom: 20px;
+  }
+
+
+  /* INSTAGRAM */
+
+  .instagram-link {
+    margin-top: 24px;
+
+    font-size: 8px;
+  }
+
+}
+
+
+/* =========================
+   MOBILE PEQUENO
+========================= */
+
+@media (max-width: 430px) {
+
+  .product-header {
+    padding:
+      0
+      14px;
+  }
+
+  .product-header-icons {
+    gap: 12px;
+  }
+
+  .gallery-main img {
+    width: 84%;
+    height: 84%;
+  }
+
+  .gallery-thumbnails {
+    gap: 3px;
+
+    padding:
+      0
+      3px;
+  }
+
+  .thumbnail {
+    height: 76px;
+  }
+
+  .thumbnail img {
+    padding: 7px;
+  }
+
+  .product-details {
+    padding:
+      32px
+      15px
+      52px;
+  }
+
+  .product-details h1 {
+    font-size: 28px;
+
+    letter-spacing: -1.1px;
+  }
+
+  .product-price {
+    font-size: 13px;
+  }
+
+  .size-button {
+    min-width: 62px;
+    height: 36px;
+
+    padding:
+      0
+      12px;
+  }
+
+  .quantity {
+    width: 96px;
+    height: 36px;
+  }
+
+  .buy-button,
+  .whatsapp-button {
+    height: 50px;
+  }
+
+}
+
+
+/* =========================
+   TELAS MUITO PEQUENAS
+========================= */
+
+@media (max-width: 350px) {
+
+  .product-details {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .product-details h1 {
+    font-size: 25px;
+  }
+
+  .thumbnail {
+    height: 68px;
+  }
+
+  .size-button {
+    min-width: 58px;
+
+    padding:
+      0
+      10px;
+  }
+
+}
+
+
+/* =========================
+   ESCONDER SCROLLBAR
+========================= */
+
+html {
+  scrollbar-width: none;
+}
+
+body {
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}

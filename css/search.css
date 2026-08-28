@@ -1,0 +1,603 @@
+/* ==================================================
+   CROMA DRIP
+   BUSCA GLOBAL
+================================================== */
+
+
+/* ==================================================
+   BLOQUEIO DA PÁGINA
+================================================== */
+
+body.search-open {
+  overflow: hidden;
+}
+
+
+/* ==================================================
+   OVERLAY
+================================================== */
+
+.search-overlay {
+  position: fixed;
+  inset: 0;
+
+  z-index: 9999;
+
+  background: rgba(0, 0, 0, 0.35);
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition:
+    opacity 0.25s ease,
+    visibility 0.25s ease;
+}
+
+.search-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+/* ==================================================
+   PAINEL
+================================================== */
+
+.search-panel {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  max-height: 82vh;
+
+  padding:
+    28px
+    34px
+    34px;
+
+  background: #f6f6f4;
+
+  transform:
+    translateY(-24px);
+
+  opacity: 0;
+
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+
+  overflow-y: auto;
+}
+
+.search-overlay.active
+.search-panel {
+  transform:
+    translateY(0);
+
+  opacity: 1;
+}
+
+
+/* ==================================================
+   HEADER
+================================================== */
+
+.search-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 28px;
+}
+
+.search-label {
+  font-size: 10px;
+  font-weight: 600;
+
+  letter-spacing: 2px;
+
+  color: #777;
+}
+
+.search-close {
+  width: 36px;
+  height: 36px;
+
+  border: 0;
+  padding: 0;
+
+  background: transparent;
+
+  color: #111;
+
+  font-size: 28px;
+  font-weight: 300;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.search-close:hover {
+  opacity: 0.5;
+  transform: rotate(90deg);
+}
+
+
+/* ==================================================
+   INPUT
+================================================== */
+
+.search-input-wrapper {
+  width: 100%;
+
+  border-bottom:
+    1px solid #111;
+
+  margin-bottom: 28px;
+}
+
+.search-input {
+  width: 100%;
+
+  border: 0;
+  outline: 0;
+
+  padding:
+    0
+    0
+    15px;
+
+  background: transparent;
+
+  color: #111;
+
+  font-family: inherit;
+
+  font-size:
+    clamp(
+      28px,
+      5vw,
+      64px
+    );
+
+  font-weight: 600;
+
+  letter-spacing: -2px;
+
+  text-transform: uppercase;
+}
+
+.search-input::placeholder {
+  color: #c1c1bd;
+
+  opacity: 1;
+}
+
+.search-input::-webkit-search-cancel-button {
+  display: none;
+}
+
+
+/* ==================================================
+   RESULTADOS
+================================================== */
+
+.search-results {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      4,
+      minmax(0, 1fr)
+    );
+
+  gap: 24px;
+}
+
+
+/* ==================================================
+   CARD DO RESULTADO
+================================================== */
+
+.search-result {
+  display: block;
+
+  color: #111;
+
+  text-decoration: none;
+}
+
+.search-result-image {
+  position: relative;
+
+  width: 100%;
+  aspect-ratio: 1 / 1;
+
+  margin-bottom: 14px;
+
+  background: #ededeb;
+
+  overflow: hidden;
+}
+
+.search-result-image img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  display: block;
+
+  transition:
+    transform 0.35s ease,
+    opacity 0.25s ease;
+}
+
+.search-result:hover
+.search-result-image img {
+  transform: scale(1.025);
+}
+
+
+/* ==================================================
+   INFO
+================================================== */
+
+.search-result-info {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.search-result-top {
+  display: flex;
+
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+.search-result h3 {
+  margin: 0;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  line-height: 1.25;
+
+  letter-spacing: -0.2px;
+}
+
+.search-result p {
+  margin: 0;
+
+  font-size: 11px;
+
+  color: #333;
+}
+
+
+/* ==================================================
+   ESGOTADO
+================================================== */
+
+.search-result-status {
+  flex: 0 0 auto;
+
+  padding:
+    5px
+    7px;
+
+  background: #111;
+  color: #fff;
+
+  font-size: 7px;
+  font-weight: 600;
+
+  line-height: 1;
+
+  letter-spacing: 1px;
+}
+
+
+/* PRODUTO ESGOTADO TAMBÉM FICA APAGADO NA BUSCA */
+
+.search-result:has(
+  .search-result-status
+)
+.search-result-image img {
+  opacity: 0.62;
+}
+
+
+/* ==================================================
+   SEM RESULTADOS
+================================================== */
+
+.search-empty {
+  grid-column:
+    1 / -1;
+
+  padding:
+    50px
+    0;
+
+  border-top:
+    1px solid #ddd;
+}
+
+.search-empty p {
+  margin: 0;
+
+  color: #777;
+
+  font-size: 10px;
+  font-weight: 600;
+
+  letter-spacing: 1.5px;
+}
+
+
+/* ==================================================
+   SCROLLBAR
+================================================== */
+
+.search-panel {
+  scrollbar-width: none;
+}
+
+.search-panel::-webkit-scrollbar {
+  display: none;
+}
+
+
+/* ==================================================
+   TABLET
+================================================== */
+
+@media (
+  max-width: 1000px
+) {
+
+  .search-results {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+
+}
+
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (
+  max-width: 700px
+) {
+
+  .search-panel {
+    min-height: 100vh;
+
+    max-height: 100vh;
+
+    padding:
+      20px
+      18px
+      28px;
+  }
+
+
+  .search-header {
+    margin-bottom: 30px;
+  }
+
+
+  .search-input {
+    font-size: 34px;
+
+    letter-spacing: -1px;
+  }
+
+
+  .search-input-wrapper {
+    margin-bottom: 24px;
+  }
+
+
+  .search-results {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+    gap:
+      24px
+      12px;
+  }
+
+
+  .search-result-image {
+    margin-bottom: 10px;
+  }
+
+
+  .search-result h3 {
+    font-size: 10px;
+  }
+
+
+  .search-result p {
+    font-size: 10px;
+  }
+
+
+  .search-result-status {
+    padding:
+      4px
+      5px;
+
+    font-size: 6px;
+  }
+
+}
+
+
+/* ==================================================
+   MOBILE PEQUENO
+================================================== */
+
+@media (
+  max-width: 420px
+) {
+
+  .search-results {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+}
+
+/* =========================
+   BUSCA MAIS COMPACTA
+========================= */
+
+.search-panel {
+  max-height: 68vh;
+
+  padding:
+    20px
+    34px
+    26px;
+}
+
+.search-header {
+  margin-bottom: 16px;
+}
+
+.search-input-wrapper {
+  margin-bottom: 20px;
+}
+
+.search-input {
+  font-size:
+    clamp(
+      24px,
+      3.2vw,
+      46px
+    );
+
+  padding-bottom: 10px;
+}
+
+
+/* RESULTADOS MENORES */
+
+.search-results {
+  grid-template-columns:
+    repeat(
+      5,
+      minmax(0, 1fr)
+    );
+
+  gap: 20px;
+}
+
+
+/* LIMITA O TAMANHO DOS CARDS */
+
+.search-result {
+  max-width: 250px;
+}
+
+.search-result-image {
+  margin-bottom: 10px;
+}
+
+.search-result h3 {
+  font-size: 10px;
+}
+
+.search-result p {
+  font-size: 9px;
+}
+
+
+/* TAG ESGOTADO MENOR */
+
+.search-result-status {
+  padding: 4px 6px;
+
+  font-size: 6px;
+
+  letter-spacing: 0.8px;
+}
+
+
+/* TABLET */
+
+@media (max-width: 1000px) {
+
+  .search-results {
+    grid-template-columns:
+      repeat(
+        4,
+        minmax(0, 1fr)
+      );
+  }
+
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+  .search-panel {
+    max-height: 100vh;
+    min-height: 100vh;
+
+    padding:
+      18px
+      16px
+      24px;
+  }
+
+  .search-input {
+    font-size: 30px;
+  }
+
+  .search-results {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+    gap:
+      20px
+      12px;
+  }
+
+  .search-result {
+    max-width: none;
+  }
+
+}
