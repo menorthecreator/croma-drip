@@ -278,7 +278,7 @@ function createSearchResult(
           !available
             ? `
               <span class="search-result-status">
-                ESGOTADO
+                SOLD
               </span>
             `
             : ""

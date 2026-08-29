@@ -870,7 +870,7 @@ function updateAvailability() {
     addToCartProduct.textContent =
       available
         ? "ADICIONAR AO CARRINHO"
-        : "ESGOTADO";
+        : "SOLD";
 
   }
 

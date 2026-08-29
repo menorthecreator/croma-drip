@@ -1131,6 +1131,7 @@ body::-webkit-scrollbar {
 
 .sold-out-label {
   position: absolute;
+
   top: 14px;
   left: 14px;
 
@@ -1138,11 +1139,12 @@ body::-webkit-scrollbar {
 
   padding: 7px 11px;
 
-  background: #111;
-  color: #fff;
+  background: #d71920;
+  color: #ffffff;
 
   font-size: 8px;
-  font-weight: 600;
+  font-weight: 700;
+
   letter-spacing: 1.4px;
   line-height: 1;
 

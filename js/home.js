@@ -63,7 +63,7 @@ function renderProductsCatalog() {
     ? ""
     : `
       <span class="sold-out-label">
-        ESGOTADO
+        SOLD
       </span>
     `;
 
