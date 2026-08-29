@@ -122,8 +122,14 @@
     translateX(0);
 }
 
-body.cart-open {
+/* Bloqueia o scroll da página somente enquanto o drawer estiver realmente aberto */
+body.cart-open:has(.cart-drawer.active) {
   overflow: hidden;
+}
+
+/* Segurança: com o carrinho fechado, a página volta a rolar normalmente */
+body:not(.cart-open) {
+  overflow-y: auto;
 }
 
 

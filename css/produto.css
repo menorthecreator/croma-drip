@@ -755,7 +755,7 @@ body {
   }
 
 
-  /* GALERIA IMERSIVA */
+  /* GALERIA MOBILE */
 
   .product-gallery {
     padding: 0;
@@ -763,11 +763,10 @@ body {
 
   .gallery-main {
     width: 100%;
+    height: 62svh;
 
-    height:
-      calc(100svh - 68px);
-
-    min-height: 0;
+    min-height: 430px;
+    max-height: 600px;
 
     display: flex;
     align-items: center;
@@ -777,8 +776,8 @@ body {
   }
 
   .gallery-main img {
-    width: 82%;
-    height: 82%;
+    width: 76%;
+    height: 76%;
 
     object-fit: contain;
   }
@@ -818,9 +817,9 @@ body {
     max-width: none;
 
     padding:
-      36px
+      32px
       18px
-      58px;
+      44px;
   }
 
   .product-category {
@@ -923,13 +922,24 @@ body {
   /* DESCRIÇÃO */
 
   .product-description {
-    margin-top: 30px;
+    margin-top: 28px;
+
+    border-top:
+      1px solid
+      rgba(0, 0, 0, 0.18);
+
+    border-bottom:
+      1px solid
+      rgba(0, 0, 0, 0.18);
   }
 
   .description-toggle {
-    height: 54px;
+    height: 58px;
 
     font-size: 9px;
+    font-weight: 600;
+
+    letter-spacing: 1.2px;
   }
 
   .description-plus {
@@ -957,9 +967,24 @@ body {
   /* INSTAGRAM */
 
   .instagram-link {
-    margin-top: 24px;
+    display: inline-block;
 
-    font-size: 8px;
+    margin-top: 28px;
+
+    padding-bottom: 5px;
+
+    color: #111;
+
+    font-size: 9px;
+    font-weight: 600;
+
+    letter-spacing: 1.1px;
+
+    border-bottom:
+      1px solid
+      #777;
+
+    text-decoration: none;
   }
 
 }
@@ -981,9 +1006,15 @@ body {
     gap: 12px;
   }
 
+  .gallery-main {
+    height: 58svh;
+    min-height: 400px;
+    max-height: 540px;
+  }
+
   .gallery-main img {
-    width: 84%;
-    height: 84%;
+    width: 78%;
+    height: 78%;
   }
 
   .gallery-thumbnails {
@@ -1004,9 +1035,9 @@ body {
 
   .product-details {
     padding:
-      32px
+      30px
       15px
-      52px;
+      42px;
   }
 
   .product-details h1 {
@@ -1086,4 +1117,112 @@ body {
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
   display: none;
+}
+
+.product-instagram {
+  margin-top: 32px;
+  padding-top: 18px;
+}
+
+.product-instagram a {
+  display: inline-block;
+  color: #111;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.3px;
+  text-decoration: none;
+  border-bottom: 1px solid #777;
+  padding-bottom: 5px;
+}
+
+.product-instagram a:hover {
+  opacity: 0.6;
+}
+
+@media (max-width: 750px) {
+  .product-info {
+    padding-bottom: 50px;
+  }
+
+  .product-description {
+    margin-top: 28px;
+  }
+
+  .product-instagram {
+    margin-top: 30px;
+  }
+
+  .product-instagram a {
+    font-size: 9px;
+    letter-spacing: 1.2px;
+  }
+}
+
+/* ==================================================
+   MOBILE FINAL — ALTURA ESTÁVEL + SCROLL
+   Evita diferenças entre iPhone SE, XR, 14 Pro Max etc.
+================================================== */
+
+@media (max-width: 750px) {
+
+  html,
+  body {
+    width: 100%;
+    height: auto !important;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto !important;
+  }
+
+  body {
+    position: static !important;
+  }
+
+  .product-page {
+    display: block;
+    width: 100%;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  .product-gallery {
+    width: 100%;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /*
+    Não usa mais svh no mobile.
+    A altura passa a acompanhar a largura do aparelho,
+    então iPhones altos não ganham uma galeria gigante.
+  */
+  .gallery-main {
+    width: 100%;
+    height: clamp(360px, 105vw, 470px) !important;
+    min-height: 0 !important;
+    max-height: none !important;
+  }
+
+  .gallery-main img {
+    width: 78%;
+    height: 78%;
+    object-fit: contain;
+  }
+
+  .product-details {
+    width: 100%;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    padding-bottom: 56px;
+  }
+
+}
+
+/* iPhones menores */
+@media (max-width: 390px) {
+  .gallery-main {
+    height: clamp(340px, 103vw, 405px) !important;
+  }
 }
