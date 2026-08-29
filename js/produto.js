@@ -6,6 +6,9 @@
 
 /* ==================================================
    IDENTIFICAR PRODUTO PELA URL
+
+   Exemplo:
+   produto.html?id=no-cap-vol01
 ================================================== */
 
 const params =
@@ -24,6 +27,14 @@ const product =
 
 /* ==================================================
    VALIDAR PRODUTO
+
+   active: false
+   = produto não deve ser acessado/exibido.
+
+   IMPORTANTE:
+   stock: 0 NÃO entra aqui.
+   Produto sem estoque continua existindo,
+   porém aparece como SOLD.
 ================================================== */
 
 if (
@@ -84,6 +95,7 @@ if (
       </div>
     </main>
   `;
+
 
   throw new Error(
     "Produto não encontrado."
@@ -193,12 +205,39 @@ const descriptionContent =
 let quantity = 1;
 
 
+/* ==================================================
+   PRIMEIRO TAMANHO COM ESTOQUE
+
+   Antes utilizávamos:
+
+   size.available
+
+   Agora a disponibilidade vem diretamente
+   do estoque:
+
+   stock > 0 = disponível
+   stock = 0 = indisponível
+================================================== */
+
 const firstAvailableSize =
   product.sizes?.find(
     size =>
-      size.available
+      isSizeAvailable(
+        product,
+        size.id
+      )
   );
 
+
+/*
+   Mantemos o NOME do tamanho aqui porque
+   o carrinho atual trabalha com valores como:
+
+   "ÚNICO"
+   "P"
+   "M"
+   "G"
+*/
 
 let selectedSize =
   firstAvailableSize?.name ||
@@ -259,9 +298,11 @@ function renderGallery() {
 
 
   const images = [
+
     {
       src:
         product.images.front,
+
       label:
         "Frente"
     },
@@ -269,6 +310,7 @@ function renderGallery() {
     {
       src:
         product.images.side,
+
       label:
         "Lateral"
     },
@@ -276,11 +318,12 @@ function renderGallery() {
     {
       src:
         product.images.back,
+
       label:
         "Traseira"
     }
-  ]
-  .filter(
+
+  ].filter(
     image =>
       Boolean(image.src)
   );
@@ -293,16 +336,26 @@ function renderGallery() {
   }
 
 
+  /* Imagem principal */
+
   mainImage.src =
-      images[0].src;
+    images[0].src;
 
-    mainImage.alt =
-      product.name;
+  mainImage.alt =
+    product.name;
 
-    mainImage.onerror = () => {
-      mainImage.onerror = null;
-      mainImage.src = "assets/logo.png";
-    };
+
+  /* Fallback caso a imagem não exista */
+
+  mainImage.onerror = () => {
+
+    mainImage.onerror = null;
+
+    mainImage.src =
+      "assets/logo.png";
+
+  };
+
 
   thumbnailsContainer.innerHTML =
     "";
@@ -434,6 +487,19 @@ function changeMainImage(
 
 /* ==================================================
    TAMANHOS
+
+   Cada tamanho possui seu próprio estoque.
+
+   Exemplo:
+
+   {
+     id: "m",
+     name: "M",
+     stock: 4
+   }
+
+   stock: 0
+   = botão daquele tamanho fica bloqueado.
 ================================================== */
 
 function renderSizes() {
@@ -476,10 +542,29 @@ function renderSizes() {
         size.name;
 
 
-      if (!size.available) {
+      /* ==============================================
+         VERIFICAR ESTOQUE DO TAMANHO
+      ============================================== */
+
+      const sizeAvailable =
+        isSizeAvailable(
+          product,
+          size.id
+        );
+
+
+      /*
+         stock = 0
+
+         Bloqueamos o tamanho e adicionamos
+         a classe visual "unavailable".
+      */
+
+      if (!sizeAvailable) {
 
         button.disabled =
           true;
+
 
         button.classList.add(
           "unavailable"
@@ -487,6 +572,8 @@ function renderSizes() {
 
       }
 
+
+      /* Tamanho selecionado */
 
       if (
         size.name ===
@@ -504,8 +591,14 @@ function renderSizes() {
         "click",
         () => {
 
+          /*
+             Segurança extra:
+             tamanho sem estoque não pode
+             ser selecionado.
+          */
+
           if (
-            !size.available
+            !sizeAvailable
           ) {
             return;
           }
@@ -515,7 +608,27 @@ function renderSizes() {
             size.name;
 
 
+          /*
+             Quando trocar de tamanho,
+             voltamos a quantidade para 1.
+
+             Isso evita:
+
+             M possui 5
+             cliente seleciona 5
+
+             depois troca para P
+             que possui apenas 2.
+          */
+
+          quantity = 1;
+
+
           updateSelectedSize();
+
+          updateQuantity();
+
+          updateAvailability();
 
 
           sizesContainer
@@ -575,21 +688,187 @@ function updateSelectedSize() {
 
 
 /* ==================================================
+   PEGAR OBJETO DO TAMANHO SELECIONADO
+
+   selectedSize guarda o nome:
+
+   "ÚNICO"
+
+   Mas para consultar estoque precisamos
+   encontrar o objeto completo:
+
+   {
+     id: "unico",
+     name: "ÚNICO",
+     stock: 3
+   }
+================================================== */
+
+function getSelectedSizeObject() {
+
+  if (
+    !selectedSize ||
+    !Array.isArray(
+      product.sizes
+    )
+  ) {
+    return null;
+  }
+
+
+  return (
+    product.sizes.find(
+      size =>
+        size.name ===
+        selectedSize
+    ) ||
+    null
+  );
+
+}
+
+
+/* ==================================================
+   ESTOQUE DA SELEÇÃO ATUAL
+
+   Se existir tamanho selecionado:
+   retorna estoque daquele tamanho.
+
+   Caso contrário:
+   retorna estoque total do produto.
+
+   trackStock: false
+   retorna Infinity porque não existe limite.
+================================================== */
+
+function getCurrentStock() {
+
+  if (
+    product.trackStock === false
+  ) {
+
+    return Infinity;
+
+  }
+
+
+  const selectedSizeObject =
+    getSelectedSizeObject();
+
+
+  if (selectedSizeObject) {
+
+    return getSizeStock(
+      product,
+      selectedSizeObject.id
+    );
+
+  }
+
+
+  return getProductStock(
+    product
+  );
+
+}
+
+
+/* ==================================================
    QUANTIDADE
+
+   A quantidade nunca poderá ultrapassar
+   o estoque disponível.
 ================================================== */
 
 function updateQuantity() {
 
-  if (!quantityValue) {
-    return;
+  const currentStock =
+    getCurrentStock();
+
+
+  /*
+     Se o estoque mudou e a quantidade atual
+     ficou maior que o disponível,
+     corrigimos automaticamente.
+  */
+
+  if (
+    Number.isFinite(
+      currentStock
+    ) &&
+    currentStock > 0 &&
+    quantity > currentStock
+  ) {
+
+    quantity =
+      currentStock;
+
   }
 
 
-  quantityValue.textContent =
-    quantity;
+  /*
+     Quantidade nunca pode ficar abaixo de 1.
+  */
+
+  if (quantity < 1) {
+
+    quantity = 1;
+
+  }
+
+
+  if (quantityValue) {
+
+    quantityValue.textContent =
+      quantity;
+
+  }
+
+
+  /* ==============================================
+     BOTÃO MENOS
+  ============================================== */
+
+  if (minusButton) {
+
+    minusButton.disabled =
+      !isProductAvailable(
+        product
+      ) ||
+      quantity <= 1;
+
+  }
+
+
+  /* ==============================================
+     BOTÃO MAIS
+
+     Quando atingir o estoque máximo,
+     o botão + fica bloqueado.
+  ============================================== */
+
+  if (plusButton) {
+
+    plusButton.disabled =
+      !isProductAvailable(
+        product
+      ) ||
+      (
+        Number.isFinite(
+          currentStock
+        ) &&
+        quantity >=
+          currentStock
+      );
+
+  }
 
 }
 
+
+/* ==================================================
+   DIMINUIR QUANTIDADE
+================================================== */
 
 minusButton?.addEventListener(
   "click",
@@ -604,17 +883,51 @@ minusButton?.addEventListener(
 
     quantity--;
 
+
     updateQuantity();
 
   }
 );
 
 
+/* ==================================================
+   AUMENTAR QUANTIDADE
+================================================== */
+
 plusButton?.addEventListener(
   "click",
   () => {
 
+    const currentStock =
+      getCurrentStock();
+
+
+    /*
+       Impede ultrapassar o estoque.
+
+       Exemplo:
+
+       estoque = 3
+       quantidade = 3
+
+       clicar + não faz nada.
+    */
+
+    if (
+      Number.isFinite(
+        currentStock
+      ) &&
+      quantity >=
+        currentStock
+    ) {
+
+      return;
+
+    }
+
+
     quantity++;
+
 
     updateQuantity();
 
@@ -700,7 +1013,7 @@ function renderDescription() {
 
 
 /* ==================================================
-   ABRIR DESCRIÇÃO
+   ABRIR / FECHAR DESCRIÇÃO
 ================================================== */
 
 descriptionToggle?.addEventListener(
@@ -717,11 +1030,16 @@ descriptionToggle?.addEventListener(
 
 /* ==================================================
    ADICIONAR AO CARRINHO
+
+   Antes de enviar para o carrinho,
+   validamos novamente o estoque.
 ================================================== */
 
 addToCartProduct?.addEventListener(
   "click",
   () => {
+
+    /* Produto completamente sem estoque */
 
     if (
       !isProductAvailable(
@@ -732,11 +1050,46 @@ addToCartProduct?.addEventListener(
     }
 
 
+    /* Produto exige tamanho */
+
     if (
       product.sizes?.length &&
       !selectedSize
     ) {
       return;
+    }
+
+
+    const selectedSizeObject =
+      getSelectedSizeObject();
+
+
+    const sizeId =
+      selectedSizeObject?.id ||
+      null;
+
+
+    /*
+       Validação de estoque.
+
+       Exemplo:
+
+       estoque = 2
+       quantidade solicitada = 3
+
+       resultado = false
+    */
+
+    if (
+      !canPurchaseQuantity(
+        product,
+        quantity,
+        sizeId
+      )
+    ) {
+
+      return;
+
     }
 
 
@@ -760,6 +1113,9 @@ addToCartProduct?.addEventListener(
 
 /* ==================================================
    WHATSAPP DIRETO DO PRODUTO
+
+   Compra pelo WhatsApp também respeita
+   o estoque atual.
 ================================================== */
 
 whatsappButton?.addEventListener(
@@ -775,6 +1131,33 @@ whatsappButton?.addEventListener(
       )
     ) {
       return;
+    }
+
+
+    const selectedSizeObject =
+      getSelectedSizeObject();
+
+
+    const sizeId =
+      selectedSizeObject?.id ||
+      null;
+
+
+    /*
+       Não permite solicitar pelo WhatsApp
+       quantidade maior que o estoque.
+    */
+
+    if (
+      !canPurchaseQuantity(
+        product,
+        quantity,
+        sizeId
+      )
+    ) {
+
+      return;
+
     }
 
 
@@ -833,7 +1216,17 @@ Total: ${formatCurrency(total)}`;
 
 
 /* ==================================================
-   PRODUTO INDISPONÍVEL
+   DISPONIBILIDADE / ESTOQUE DO PRODUTO
+
+   Essa é uma das funções principais
+   do novo sistema.
+
+   NÃO utilizamos mais:
+
+   product.available
+   size.available
+
+   Agora tudo é baseado em stock.
 ================================================== */
 
 function updateAvailability() {
@@ -845,13 +1238,30 @@ function updateAvailability() {
     product.sizes.length > 0;
 
 
+  /* ==============================================
+     VERIFICAR SE EXISTE TAMANHO COM ESTOQUE
+  ============================================== */
+
   const hasAvailableSize =
     !hasSizes ||
     product.sizes.some(
       size =>
-        size.available
+        isSizeAvailable(
+          product,
+          size.id
+        )
     );
 
+
+  /*
+     Produto disponível quando:
+
+     active = true
+
+     E
+
+     existe estoque.
+  */
 
   const available =
     isProductAvailable(
@@ -860,8 +1270,18 @@ function updateAvailability() {
     hasAvailableSize;
 
 
+  const currentStock =
+    getCurrentStock();
+
+
   /* ==================================================
      BOTÃO DO CARRINHO
+
+     estoque > 0
+     ADICIONAR AO CARRINHO
+
+     estoque = 0
+     SOLD
   ================================================== */
 
   if (
@@ -881,27 +1301,62 @@ function updateAvailability() {
 
 
   /* ==================================================
-     QUANTIDADE
+     BOTÃO MENOS
   ================================================== */
 
   if (minusButton) {
 
     minusButton.disabled =
-      !available;
+      !available ||
+      quantity <= 1;
 
   }
 
 
+  /* ==================================================
+     BOTÃO MAIS
+
+     Também bloqueamos quando atingir
+     o estoque disponível.
+
+     Exemplo:
+
+     stock: 1
+     quantidade: 1
+     botão + bloqueado
+
+     stock: 3
+     quantidade: 2
+     botão + liberado
+
+     stock: 3
+     quantidade: 3
+     botão + bloqueado
+  ================================================== */
+
   if (plusButton) {
 
     plusButton.disabled =
-      !available;
+      !available ||
+      (
+        Number.isFinite(
+          currentStock
+        ) &&
+        quantity >=
+          currentStock
+      );
 
   }
 
 
   /* ==================================================
      WHATSAPP
+
+     Produto disponível:
+     botão aparece.
+
+     Produto SOLD:
+     botão desaparece.
   ================================================== */
 
   if (
@@ -913,11 +1368,13 @@ function updateAvailability() {
       whatsappButton.style.display =
         "";
 
+
       whatsappButton
         .classList
         .remove(
           "disabled"
         );
+
 
       whatsappButton
         .removeAttribute(
@@ -929,11 +1386,13 @@ function updateAvailability() {
       whatsappButton.style.display =
         "none";
 
+
       whatsappButton
         .classList
         .add(
           "disabled"
         );
+
 
       whatsappButton
         .setAttribute(
@@ -945,13 +1404,27 @@ function updateAvailability() {
 
   }
 
+
+  /*
+     Garante que o contador respeite
+     o estoque atual.
+  */
+
+  updateQuantity();
+
 }
+
+
 /* ==================================================
-   INICIAR
+   INICIAR PÁGINA
 ================================================== */
 
 renderGallery();
+
 renderSizes();
+
 renderDescription();
+
 updateQuantity();
+
 updateAvailability();

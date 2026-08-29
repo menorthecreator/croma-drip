@@ -1,6 +1,21 @@
 /* ==================================================
    CROMA DRIP
    CARRINHO COMPARTILHADO
+   CONTROLE DE ESTOQUE
+================================================== */
+
+
+/* ==================================================
+   CHAVE DO LOCALSTORAGE
+
+   O carrinho continua armazenando somente:
+
+   productId
+   quantity
+   size
+
+   O estoque e o preço são sempre consultados
+   novamente no catálogo PRODUCTS.
 ================================================== */
 
 const CART_STORAGE_KEY =
@@ -9,6 +24,11 @@ const CART_STORAGE_KEY =
 
 /* ==================================================
    CARREGAR CARRINHO
+
+   Recupera o carrinho salvo no navegador.
+
+   Também limpa estruturas inválidas para evitar
+   erros caso o localStorage esteja corrompido.
 ================================================== */
 
 function loadCart() {
@@ -28,39 +48,53 @@ function loadCart() {
         savedCart
       )
     ) {
+
       return [];
+
     }
 
 
     return savedCart
-      .filter(item => {
 
-        return (
-          item &&
-          item.productId &&
-          Number(item.quantity) > 0
-        );
+      .filter(
+        item => {
 
-      })
-      .map(item => {
+          return (
+            item &&
+            item.productId &&
+            Number(item.quantity) > 0
+          );
 
-        return {
+        }
+      )
 
-          productId:
-            item.productId,
+      .map(
+        item => {
 
-          quantity:
-            Number(
-              item.quantity
-            ),
+          return {
 
-          size:
-            item.size ||
-            null
+            productId:
+              item.productId,
 
-        };
+            quantity:
+              Math.max(
+                1,
+                Math.floor(
+                  Number(
+                    item.quantity
+                  ) || 1
+                )
+              ),
 
-      });
+            size:
+              item.size ||
+              null
+
+          };
+
+        }
+      );
+
 
   } catch (error) {
 
@@ -69,6 +103,7 @@ function loadCart() {
       error
     );
 
+
     return [];
 
   }
@@ -76,12 +111,16 @@ function loadCart() {
 }
 
 
+/* ==================================================
+   ESTADO DO CARRINHO
+================================================== */
+
 let cart =
   loadCart();
 
 
 /* ==================================================
-   ELEMENTOS
+   ELEMENTOS DO CARRINHO
 ================================================== */
 
 const cartDrawer =
@@ -126,12 +165,6 @@ const cartItems =
   );
 
 
-const emptyCart =
-  document.querySelector(
-    "#emptyCart"
-  );
-
-
 const cartSubtotal =
   document.querySelector(
     "#cartSubtotal"
@@ -169,7 +202,7 @@ const freeShippingGoalValue =
 
 
 /* ==================================================
-   SALVAR
+   SALVAR CARRINHO
 ================================================== */
 
 function saveCart() {
@@ -183,6 +216,22 @@ function saveCart() {
       )
     );
 
+
+    /* AVISA O RESTANTE DO SITE
+       QUE O CARRINHO MUDOU */
+
+    window.dispatchEvent(
+      new CustomEvent(
+        "croma:cart-updated",
+        {
+          detail: {
+            cart
+          }
+        }
+      )
+    );
+
+
   } catch (error) {
 
     console.error(
@@ -194,6 +243,421 @@ function saveCart() {
 
 }
 
+/* ==================================================
+   PRODUTO DO ITEM
+
+   Recebe um item do carrinho e encontra
+   o produto correspondente no PRODUCTS.
+================================================== */
+
+function getCartProduct(
+  item
+) {
+
+  if (!item) {
+    return null;
+  }
+
+
+  return (
+    getProductById(
+      item.productId
+    ) ||
+    null
+  );
+
+}
+
+
+/* ==================================================
+   TAMANHO DO ITEM
+
+   O carrinho atualmente salva o NOME:
+
+   "ÚNICO"
+   "P"
+   "M"
+   "G"
+
+   Esta função encontra o objeto completo
+   correspondente dentro do produto.
+================================================== */
+
+function getCartItemSize(
+  product,
+  sizeName
+) {
+
+  if (
+    !product ||
+    !Array.isArray(
+      product.sizes
+    ) ||
+    !sizeName
+  ) {
+
+    return null;
+
+  }
+
+
+  return (
+    product.sizes.find(
+      size =>
+        size.name ===
+        sizeName
+    ) ||
+    null
+  );
+
+}
+
+
+/* ==================================================
+   ESTOQUE DISPONÍVEL PARA UM ITEM
+
+   Se o produto possui tamanho:
+
+   consulta o estoque daquele tamanho.
+
+   Exemplo:
+
+   M → stock: 3
+
+   retorna 3.
+
+   Para produtos sem tamanho,
+   utiliza o estoque total.
+
+   trackStock: false
+   significa estoque ilimitado.
+================================================== */
+
+function getCartItemStock(
+  product,
+  sizeName = null
+) {
+
+  if (!product) {
+    return 0;
+  }
+
+
+  if (
+    product.trackStock === false
+  ) {
+
+    return Infinity;
+
+  }
+
+
+  const sizeObject =
+    getCartItemSize(
+      product,
+      sizeName
+    );
+
+
+  if (sizeObject) {
+
+    return getSizeStock(
+      product,
+      sizeObject.id
+    );
+
+  }
+
+
+  /*
+     Se o produto possui tamanhos,
+     mas nenhum tamanho válido foi encontrado,
+     não permitimos assumir o estoque total.
+
+     Isso evita uma inconsistência como:
+
+     tamanho antigo/inexistente no localStorage.
+  */
+
+  if (
+    Array.isArray(
+      product.sizes
+    ) &&
+    product.sizes.length > 0
+  ) {
+
+    return 0;
+
+  }
+
+
+  return getProductStock(
+    product
+  );
+
+}
+
+
+/* ==================================================
+   VALIDAR ITEM DO CARRINHO
+
+   Um item só é válido quando:
+
+   - produto existe;
+   - produto está ativo;
+   - possui estoque;
+   - tamanho ainda existe;
+   - tamanho possui estoque;
+   - quantidade não ultrapassa estoque.
+
+   IMPORTANTE:
+
+   Esta função NÃO diminui estoque.
+   Ela apenas verifica.
+================================================== */
+
+function isCartItemValid(
+  item
+) {
+
+  const product =
+    getCartProduct(
+      item
+    );
+
+
+  if (
+    !product ||
+    !product.active ||
+    !isProductAvailable(
+      product
+    )
+  ) {
+
+    return false;
+
+  }
+
+
+  const stock =
+    getCartItemStock(
+      product,
+      item.size
+    );
+
+
+  if (stock <= 0) {
+
+    return false;
+
+  }
+
+
+  const quantity =
+    Number(
+      item.quantity
+    );
+
+
+  if (
+    !Number.isInteger(
+      quantity
+    ) ||
+    quantity <= 0
+  ) {
+
+    return false;
+
+  }
+
+
+  if (
+    Number.isFinite(
+      stock
+    ) &&
+    quantity > stock
+  ) {
+
+    return false;
+
+  }
+
+
+  return true;
+
+}
+
+
+/* ==================================================
+   SINCRONIZAR CARRINHO COM ESTOQUE
+
+   Esta função é importante.
+
+   Imagine:
+
+   ontem:
+   estoque = 5
+   cliente colocou 5 no carrinho
+
+   hoje:
+   estoque foi alterado para 2
+
+   O carrinho antigo ainda poderia conter 5.
+
+   Aqui corrigimos automaticamente:
+
+   carrinho 5 → carrinho 2
+
+   Se estoque chegar a 0:
+   o item é removido do carrinho.
+
+   Isso é apenas sincronização LOCAL.
+
+   Futuramente o backend fará a validação oficial.
+================================================== */
+
+function syncCartWithStock() {
+
+  let changed =
+    false;
+
+
+  const synchronizedCart =
+    [];
+
+
+  cart.forEach(
+    item => {
+
+      const product =
+        getCartProduct(
+          item
+        );
+
+
+      /*
+         Produto removido ou ocultado.
+      */
+
+      if (
+        !product ||
+        !product.active
+      ) {
+
+        changed =
+          true;
+
+        return;
+
+      }
+
+
+      /*
+         Produto completamente SOLD.
+      */
+
+      if (
+        !isProductAvailable(
+          product
+        )
+      ) {
+
+        changed =
+          true;
+
+        return;
+
+      }
+
+
+      const stock =
+        getCartItemStock(
+          product,
+          item.size
+        );
+
+
+      /*
+         Tamanho sem estoque ou inválido.
+      */
+
+      if (stock <= 0) {
+
+        changed =
+          true;
+
+        return;
+
+      }
+
+
+      let quantity =
+        Math.max(
+          1,
+          Math.floor(
+            Number(
+              item.quantity
+            ) || 1
+          )
+        );
+
+
+      /*
+         Carrinho maior que o estoque?
+
+         Reduz automaticamente para
+         o máximo disponível.
+      */
+
+      if (
+        Number.isFinite(
+          stock
+        ) &&
+        quantity > stock
+      ) {
+
+        quantity =
+          stock;
+
+        changed =
+          true;
+
+      }
+
+
+      synchronizedCart.push({
+
+        productId:
+          item.productId,
+
+        quantity:
+          quantity,
+
+        size:
+          item.size ||
+          null
+
+      });
+
+    }
+  );
+
+
+  cart =
+    synchronizedCart;
+
+
+  if (changed) {
+
+    saveCart();
+
+  }
+
+
+  return changed;
+
+}
+
 
 /* ==================================================
    ABRIR CARRINHO
@@ -201,19 +665,38 @@ function saveCart() {
 
 function openCart() {
 
+  /*
+     Antes de abrir, sincroniza com o estoque.
+
+     Assim o usuário não vê uma quantidade
+     antiga que já não existe mais.
+  */
+
+  syncCartWithStock();
+
+
   cartDrawer
     ?.classList
-    .add("active");
+    .add(
+      "active"
+    );
 
 
   cartOverlay
     ?.classList
-    .add("active");
+    .add(
+      "active"
+    );
 
 
   document.body
     .classList
-    .add("cart-open");
+    .add(
+      "cart-open"
+    );
+
+
+  renderCart();
 
 }
 
@@ -226,17 +709,23 @@ function closeCart() {
 
   cartDrawer
     ?.classList
-    .remove("active");
+    .remove(
+      "active"
+    );
 
 
   cartOverlay
     ?.classList
-    .remove("active");
+    .remove(
+      "active"
+    );
 
 
   document.body
     .classList
-    .remove("cart-open");
+    .remove(
+      "cart-open"
+    );
 
 }
 
@@ -280,6 +769,8 @@ continueShoppingFooter
   );
 
 
+/* ESC fecha o carrinho */
+
 document
   .addEventListener(
     "keydown",
@@ -300,6 +791,16 @@ document
 
 /* ==================================================
    ADICIONAR AO CARRINHO
+
+   Esta função agora consulta estoque ANTES
+   de adicionar qualquer quantidade.
+
+   IMPORTANTE:
+
+   adicionar ao carrinho NÃO reduz stock.
+
+   O stock representa estoque físico disponível
+   na fonte atual de dados.
 ================================================== */
 
 function addToCart(
@@ -313,6 +814,8 @@ function addToCart(
       productId
     );
 
+
+  /* Produto inexistente / oculto / SOLD */
 
   if (
     !product ||
@@ -329,29 +832,112 @@ function addToCart(
   const quantityToAdd =
     Math.max(
       1,
-      Number(quantity) || 1
+      Math.floor(
+        Number(
+          quantity
+        ) || 1
+      )
     );
 
 
+  /*
+     Descobre o estoque específico
+     daquela variação/tamanho.
+  */
+
+  const stock =
+    getCartItemStock(
+      product,
+      size
+    );
+
+
+  if (stock <= 0) {
+
+    return false;
+
+  }
+
+
   const existingItem =
-    cart.find(item => {
+    cart.find(
+      item => {
 
-      return (
-        item.productId ===
-          productId &&
-        item.size ===
-          size
-      );
+        return (
+          item.productId ===
+            productId &&
+          item.size ===
+            size
+        );
 
-    });
+      }
+    );
 
+
+  /*
+     Se o item já existe:
+
+     precisamos considerar:
+
+     quantidade no carrinho
+     +
+     nova quantidade
+
+     Exemplo:
+
+     estoque = 3
+
+     carrinho já possui 2
+
+     usuário tenta adicionar +2
+
+     2 + 2 = 4
+
+     NÃO permitimos.
+  */
+
+  const currentQuantity =
+    existingItem
+      ? Number(
+          existingItem.quantity
+        ) || 0
+      : 0;
+
+
+  const finalQuantity =
+    currentQuantity +
+    quantityToAdd;
+
+
+  if (
+    Number.isFinite(
+      stock
+    ) &&
+    finalQuantity > stock
+  ) {
+
+    return false;
+
+  }
+
+
+  /* ==============================================
+     ITEM JÁ EXISTE
+  ============================================== */
 
   if (existingItem) {
 
-    existingItem.quantity +=
-      quantityToAdd;
+    existingItem.quantity =
+      finalQuantity;
 
-  } else {
+  }
+
+
+  /* ==============================================
+     ITEM NOVO
+  ============================================== */
+
+  else {
 
     cart.push({
 
@@ -373,6 +959,7 @@ function addToCart(
 
   renderCart();
 
+
   return true;
 
 }
@@ -388,16 +975,18 @@ function removeCartItem(
 ) {
 
   cart =
-    cart.filter(item => {
+    cart.filter(
+      item => {
 
-      return !(
-        item.productId ===
-          productId &&
-        item.size ===
-          size
-      );
+        return !(
+          item.productId ===
+            productId &&
+          item.size ===
+            size
+        );
 
-    });
+      }
+    );
 
 
   saveCart();
@@ -409,6 +998,15 @@ function removeCartItem(
 
 /* ==================================================
    AUMENTAR QUANTIDADE
+
+   O botão + agora respeita o estoque.
+
+   Exemplo:
+
+   estoque = 3
+   carrinho = 3
+
+   clicar + não faz nada.
 ================================================== */
 
 function increaseCartItem(
@@ -417,35 +1015,95 @@ function increaseCartItem(
 ) {
 
   const item =
-    cart.find(item => {
+    cart.find(
+      item => {
 
-      return (
-        item.productId ===
-          productId &&
-        item.size ===
-          size
-      );
+        return (
+          item.productId ===
+            productId &&
+          item.size ===
+            size
+        );
 
-    });
+      }
+    );
 
 
   if (!item) {
-    return;
+    return false;
   }
 
 
-  item.quantity++;
+  const product =
+    getCartProduct(
+      item
+    );
+
+
+  if (
+    !product ||
+    !isProductAvailable(
+      product
+    )
+  ) {
+
+    syncCartWithStock();
+
+    renderCart();
+
+    return false;
+
+  }
+
+
+  const stock =
+    getCartItemStock(
+      product,
+      size
+    );
+
+
+  const nextQuantity =
+    item.quantity + 1;
+
+
+  /*
+     Chegou no limite?
+
+     Não aumenta.
+  */
+
+  if (
+    Number.isFinite(
+      stock
+    ) &&
+    nextQuantity > stock
+  ) {
+
+    return false;
+
+  }
+
+
+  item.quantity =
+    nextQuantity;
 
 
   saveCart();
 
   renderCart();
 
+
+  return true;
+
 }
 
 
 /* ==================================================
    DIMINUIR QUANTIDADE
+
+   Se chegar em zero,
+   remove completamente o item.
 ================================================== */
 
 function decreaseCartItem(
@@ -454,16 +1112,18 @@ function decreaseCartItem(
 ) {
 
   const item =
-    cart.find(item => {
+    cart.find(
+      item => {
 
-      return (
-        item.productId ===
-          productId &&
-        item.size ===
-          size
-      );
+        return (
+          item.productId ===
+            productId &&
+          item.size ===
+            size
+        );
 
-    });
+      }
+    );
 
 
   if (!item) {
@@ -496,40 +1156,21 @@ function decreaseCartItem(
 
 
 /* ==================================================
-   PRODUTO DO ITEM
-================================================== */
-
-function getCartProduct(
-  item
-) {
-
-  return getProductById(
-    item.productId
-  );
-
-}
-
-
-/* ==================================================
    ITENS VÁLIDOS
+
+   Antes de calcular preço ou finalizar,
+   utilizamos somente itens que continuam
+   compatíveis com o estoque atual.
 ================================================== */
 
 function getValidCartItems() {
 
-  return cart.filter(item => {
-
-    const product =
-      getCartProduct(
+  return cart.filter(
+    item =>
+      isCartItemValid(
         item
-      );
-
-
-    return (
-      product &&
-      product.active
-    );
-
-  });
+      )
+  );
 
 }
 
@@ -568,6 +1209,9 @@ function calculateCartSubtotal() {
 
 /* ==================================================
    QUANTIDADE TOTAL
+
+   Controla também o número exibido
+   no ícone do carrinho.
 ================================================== */
 
 function calculateCartQuantity() {
@@ -621,7 +1265,9 @@ function updateShippingGoal(
     !shippingMessage ||
     !shippingProgressBar
   ) {
+
     return;
+
   }
 
 
@@ -657,6 +1303,7 @@ function updateShippingGoal(
         "achieved"
       );
 
+
     return;
 
   }
@@ -682,9 +1329,16 @@ function updateShippingGoal(
 
 }
 
-
-/* ==================================================
+ /* ==================================================
    RENDERIZAR CARRINHO
+
+   Aqui mostramos apenas itens que ainda
+   continuam válidos de acordo com:
+
+   produto ativo
+   tamanho existente
+   estoque disponível
+   quantidade válida
 ================================================== */
 
 function renderCart() {
@@ -694,6 +1348,14 @@ function renderCart() {
   }
 
 
+  /*
+     Antes de renderizar, conferimos se o
+     estoque mudou desde a última interação.
+  */
+
+  syncCartWithStock();
+
+
   const validItems =
     getValidCartItems();
 
@@ -701,6 +1363,10 @@ function renderCart() {
   cartItems.innerHTML =
     "";
 
+
+  /* ==================================================
+     CARRINHO VAZIO
+  ================================================== */
 
   if (
     validItems.length === 0
@@ -739,7 +1405,14 @@ function renderCart() {
         closeCart
       );
 
-  } else {
+  }
+
+
+  /* ==================================================
+     ITENS DO CARRINHO
+  ================================================== */
+
+  else {
 
     validItems.forEach(
       item => {
@@ -750,15 +1423,48 @@ function renderCart() {
           );
 
 
+        if (!product) {
+          return;
+        }
+
+
         const size =
           item.size ||
           product.sizes?.[0]?.name ||
           "ÚNICO";
 
 
+        /*
+           Estoque atual da variação.
+        */
+
+        const stock =
+          getCartItemStock(
+            product,
+            item.size
+          );
+
+
         const itemTotal =
           product.price *
           item.quantity;
+
+
+        /*
+           Descobre se já chegou no limite.
+
+           Se:
+           estoque = 3
+           quantidade = 3
+
+           botão + fica desativado.
+        */
+
+        const reachedStockLimit =
+          Number.isFinite(
+            stock
+          ) &&
+          item.quantity >= stock;
 
 
         const element =
@@ -782,6 +1488,7 @@ function renderCart() {
                 product
               )}"
               alt="${product.name}"
+              onerror="this.onerror=null;this.src='assets/logo.png';"
             >
 
           </div>
@@ -847,6 +1554,11 @@ function renderCart() {
                   class="cart-plus"
                   type="button"
                   aria-label="Aumentar quantidade"
+                  ${
+                    reachedStockLimit
+                      ? "disabled"
+                      : ""
+                  }
                 >
                   +
                 </button>
@@ -868,6 +1580,10 @@ function renderCart() {
         `;
 
 
+        /* ==================================================
+           REMOVER
+        ================================================== */
+
         element
           .querySelector(
             ".remove-cart-item"
@@ -885,6 +1601,10 @@ function renderCart() {
           );
 
 
+        /* ==================================================
+           DIMINUIR
+        ================================================== */
+
         element
           .querySelector(
             ".cart-minus"
@@ -901,6 +1621,18 @@ function renderCart() {
             }
           );
 
+
+        /* ==================================================
+           AUMENTAR
+
+           A função increaseCartItem()
+           faz a validação novamente.
+
+           Portanto mesmo que alguém remova
+           o atributo disabled pelo DevTools,
+           o JavaScript continua bloqueando
+           quantidade acima do estoque.
+        ================================================== */
 
         element
           .querySelector(
@@ -930,9 +1662,17 @@ function renderCart() {
   }
 
 
+  /* ==================================================
+     SUBTOTAL
+  ================================================== */
+
   const subtotal =
     calculateCartSubtotal();
 
+
+  /* ==================================================
+     QUANTIDADE TOTAL
+  ================================================== */
 
   const totalQuantity =
     calculateCartQuantity();
@@ -950,6 +1690,10 @@ function renderCart() {
 
   }
 
+
+  /* ==================================================
+     CONTADOR NO ÍCONE
+  ================================================== */
 
   if (
     cartCount
@@ -969,6 +1713,13 @@ function renderCart() {
   }
 
 
+  /* ==================================================
+     BOTÃO WHATSAPP
+
+     Só habilitamos se houver pelo menos
+     um item válido no carrinho.
+  ================================================== */
+
   if (
     cartWhatsapp
   ) {
@@ -979,6 +1730,10 @@ function renderCart() {
   }
 
 
+  /* ==================================================
+     FRETE
+  ================================================== */
+
   updateShippingGoal(
     subtotal
   );
@@ -987,10 +1742,152 @@ function renderCart() {
 
 
 /* ==================================================
-   WHATSAPP
+   VALIDAR CARRINHO ANTES DO WHATSAPP
+
+   Esta é uma segunda barreira.
+
+   Mesmo que o usuário tenha deixado o carrinho
+   aberto por algum tempo, antes de mandar o pedido
+   conferimos o estoque mais uma vez.
+
+   IMPORTANTE:
+
+   ainda NÃO reduz estoque.
+================================================== */
+
+function validateCartBeforeCheckout() {
+
+  /*
+     Atualiza quantidades antigas.
+
+     Exemplo:
+
+     carrinho tinha 5
+     estoque agora é 2
+
+     vira 2.
+  */
+
+  syncCartWithStock();
+
+
+  const validItems =
+    getValidCartItems();
+
+
+  if (
+    validItems.length === 0
+  ) {
+
+    renderCart();
+
+    return false;
+
+  }
+
+
+  /*
+     Confirma item por item.
+  */
+
+  const allItemsValid =
+    validItems.every(
+      item => {
+
+        const product =
+          getCartProduct(
+            item
+          );
+
+
+        if (
+          !product ||
+          !isProductAvailable(
+            product
+          )
+        ) {
+
+          return false;
+
+        }
+
+
+        const stock =
+          getCartItemStock(
+            product,
+            item.size
+          );
+
+
+        if (stock <= 0) {
+
+          return false;
+
+        }
+
+
+        if (
+          Number.isFinite(
+            stock
+          ) &&
+          item.quantity > stock
+        ) {
+
+          return false;
+
+        }
+
+
+        return true;
+
+      }
+    );
+
+
+  if (!allItemsValid) {
+
+    syncCartWithStock();
+
+    renderCart();
+
+    return false;
+
+  }
+
+
+  return true;
+
+}
+
+
+/* ==================================================
+   MENSAGEM DO WHATSAPP
+
+   Gera somente o texto do pedido.
+
+   NÃO altera estoque.
+   NÃO cria venda.
+   NÃO reserva produto.
+
+   Na arquitetura futura:
+
+   pagamento confirmado
+          ↓
+   backend
+          ↓
+   baixa de estoque
 ================================================== */
 
 function buildWhatsappMessage() {
+
+  if (
+    !validateCartBeforeCheckout()
+  ) {
+
+    return null;
+
+  }
+
 
   const validItems =
     getValidCartItems();
@@ -1023,6 +1920,11 @@ function buildWhatsappMessage() {
         );
 
 
+      if (!product) {
+        return;
+      }
+
+
       const size =
         item.size ||
         product.sizes?.[0]?.name ||
@@ -1051,7 +1953,9 @@ Valor: ${formatCurrency(total)}
 
 
   message +=
-`Subtotal: ${formatCurrency(subtotal)}`;
+`Subtotal: ${formatCurrency(
+  subtotal
+)}`;
 
 
   if (
@@ -1075,6 +1979,16 @@ Frete grátis atingido.`;
 
 /* ==================================================
    FINALIZAR PELO WHATSAPP
+
+   ATENÇÃO:
+
+   clicar aqui NÃO reduz estoque.
+
+   WhatsApp representa somente intenção
+   de finalizar o pedido.
+
+   A baixa real será responsabilidade
+   do backend/admin no futuro.
 ================================================== */
 
 cartWhatsapp
@@ -1082,12 +1996,28 @@ cartWhatsapp
     "click",
     () => {
 
+      /*
+         Última conferência antes
+         de abrir o WhatsApp.
+      */
+
+      if (
+        !validateCartBeforeCheckout()
+      ) {
+
+        return;
+
+      }
+
+
       const message =
         buildWhatsappMessage();
 
 
       if (!message) {
+
         return;
+
       }
 
 
@@ -1109,6 +2039,16 @@ cartWhatsapp
 
 /* ==================================================
    SINCRONIZAR ENTRE ABAS
+
+   Exemplo:
+
+   Loja aberta em duas abas.
+
+   Se o carrinho mudar em uma,
+   a outra recebe a atualização.
+
+   Também fazemos nova verificação
+   de estoque.
 ================================================== */
 
 window
@@ -1120,13 +2060,17 @@ window
         event.key !==
         CART_STORAGE_KEY
       ) {
+
         return;
+
       }
 
 
       cart =
         loadCart();
 
+
+      syncCartWithStock();
 
       renderCart();
 
@@ -1135,7 +2079,84 @@ window
 
 
 /* ==================================================
-   INICIALIZAR
+   ATUALIZAR QUANDO A ABA VOLTA AO FOCO
+
+   Isso ajuda quando o usuário:
+
+   abre outra aba
+   ↓
+   volta para a loja
+   ↓
+   carrinho é revalidado
+
+   No futuro, com API, este ponto poderá
+   consultar novamente o servidor.
 ================================================== */
+
+window
+  .addEventListener(
+    "focus",
+    () => {
+
+      syncCartWithStock();
+
+      renderCart();
+
+    }
+  );
+
+
+/* ==================================================
+   ATUALIZAR QUANDO A PÁGINA VOLTA A FICAR VISÍVEL
+
+   Útil principalmente em celular.
+
+   Exemplo:
+
+   site
+   ↓
+   WhatsApp
+   ↓
+   volta para o navegador
+
+   Revalidamos o carrinho.
+
+   Novamente:
+
+   NÃO damos baixa no estoque.
+================================================== */
+
+document
+  .addEventListener(
+    "visibilitychange",
+    () => {
+
+      if (
+        document.visibilityState ===
+        "visible"
+      ) {
+
+        syncCartWithStock();
+
+        renderCart();
+
+      }
+
+    }
+  );
+
+
+/* ==================================================
+   INICIALIZAR
+
+   Assim que cart.js carrega:
+
+   1. lê localStorage
+   2. confere estoque
+   3. corrige carrinho antigo
+   4. renderiza
+================================================== */
+
+syncCartWithStock();
 
 renderCart();

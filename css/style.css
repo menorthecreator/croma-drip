@@ -1184,6 +1184,42 @@ body::-webkit-scrollbar {
 }
 
 /* ==================================================
+   PRODUTO TOTALMENTE NO CARRINHO
+================================================== */
+
+.in-cart-label {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 10;
+
+  padding: 7px 11px;
+
+  background: #111;
+  color: #fff;
+
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  line-height: 1;
+
+  pointer-events: none;
+}
+
+
+/* Mantém o produto visível normalmente.
+
+   Diferente de SOLD, não diminuímos
+   a opacidade da imagem.
+*/
+
+.product-card.is-in-cart
+.add-product {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ==================================================
    FOOTER
 ================================================== */
 

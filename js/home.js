@@ -13,6 +13,114 @@ const productsGrid =
     ".products-grid"
   );
 
+  /* ==================================================
+   QUANTIDADE DO PRODUTO NO CARRINHO
+
+   Soma quantas unidades daquele produto
+   já estão no carrinho local do usuário.
+================================================== */
+
+function getProductQuantityInCart(
+  productId
+) {
+
+  if (
+    !Array.isArray(cart)
+  ) {
+
+    return 0;
+
+  }
+
+
+  return cart
+    .filter(
+      item =>
+        item.productId ===
+        productId
+    )
+    .reduce(
+      (
+        total,
+        item
+      ) => {
+
+        return (
+          total +
+          (
+            Number(
+              item.quantity
+            ) || 0
+          )
+        );
+
+      },
+      0
+    );
+
+}
+
+
+/* ==================================================
+   VERIFICAR SE TODO O ESTOQUE JÁ ESTÁ NO CARRINHO
+
+   IMPORTANTE:
+
+   isso NÃO significa SOLD.
+
+   Significa apenas que aquele usuário
+   já colocou no carrinho todas as unidades
+   disponíveis para ele.
+================================================== */
+
+function isProductFullyInCart(
+  product
+) {
+
+  if (
+    !product ||
+    !isProductAvailable(
+      product
+    )
+  ) {
+
+    return false;
+
+  }
+
+
+  /*
+     Produtos sem controle de estoque
+     nunca ficam "NO CARRINHO".
+  */
+
+  if (
+    product.trackStock === false
+  ) {
+
+    return false;
+
+  }
+
+
+  const stock =
+    getProductStock(
+      product
+    );
+
+
+  const quantityInCart =
+    getProductQuantityInCart(
+      product.id
+    );
+
+
+  return (
+    stock > 0 &&
+    quantityInCart >= stock
+  );
+
+}
 
 /* ==================================================
    RENDERIZAR CATÁLOGO
@@ -41,10 +149,24 @@ function renderProductsCatalog() {
         );
 
 
-      card.className =
-  isProductAvailable(product)
-    ? "product-card"
-    : "product-card is-sold-out";
+      const productAvailable =
+  isProductAvailable(
+    product
+  );
+
+
+const fullyInCart =
+  isProductFullyInCart(
+    product
+  );
+
+
+card.className =
+  !productAvailable
+    ? "product-card is-sold-out"
+    : fullyInCart
+      ? "product-card is-in-cart"
+      : "product-card";
 
 
       const productUrl =
@@ -58,14 +180,33 @@ function renderProductsCatalog() {
           .join(",");
 
 
-      const availabilityLabel =
-  isProductAvailable(product)
-    ? ""
-    : `
-      <span class="sold-out-label">
-        SOLD
-      </span>
-    `;
+      let availabilityLabel =
+  "";
+
+
+if (!productAvailable) {
+
+  availabilityLabel = `
+
+    <span class="sold-out-label">
+      SOLD
+    </span>
+
+  `;
+
+}
+
+else if (fullyInCart) {
+
+  availabilityLabel = `
+
+    <span class="in-cart-label">
+      NO CARRINHO
+    </span>
+
+  `;
+
+}
 
 
       card.innerHTML = `
@@ -136,7 +277,7 @@ function renderProductsCatalog() {
             type="button"
             data-product-id="${product.id}"
             aria-label="Adicionar ${product.name} ao carrinho"
-            ${isProductAvailable(product) ? "" : "disabled"}
+           ${productAvailable && !fullyInCart ? "" : "disabled"}
           >
 
             <svg
@@ -476,21 +617,56 @@ function bindAddProductButtons() {
             );
 
 
+          /* Produto inexistente ou SOLD */
+
           if (
+            !product ||
             !isProductAvailable(
               product
             )
           ) {
+
             return;
+
           }
 
+
+          /* ==========================================
+             PRIMEIRO TAMANHO COM ESTOQUE
+          ========================================== */
 
           const defaultSize =
             product.sizes?.find(
               size =>
-                size.available
+                isSizeAvailable(
+                  product,
+                  size.id
+                )
             )?.name || null;
 
+
+          /*
+             Se possui tamanhos,
+             mas nenhum possui estoque,
+             não permite adicionar.
+          */
+
+          if (
+            Array.isArray(
+              product.sizes
+            ) &&
+            product.sizes.length > 0 &&
+            !defaultSize
+          ) {
+
+            return;
+
+          }
+
+
+          /* ==========================================
+             ADICIONAR AO CARRINHO
+          ========================================== */
 
           const added =
             addToCart(
@@ -500,20 +676,29 @@ function bindAddProductButtons() {
             );
 
 
+          /* ==========================================
+             FEEDBACK VISUAL
+          ========================================== */
+
           if (added) {
 
             const originalHTML =
               button.innerHTML;
 
+
             button.classList.add(
               "is-added"
             );
 
+
             button.innerHTML = `
+
               <span class="added-check">
                 ✓
               </span>
+
             `;
+
 
             setTimeout(
               () => {
@@ -521,9 +706,11 @@ function bindAddProductButtons() {
                 button.innerHTML =
                   originalHTML;
 
+
                 button.classList.remove(
                   "is-added"
                 );
+
 
                 openCart();
 
@@ -540,6 +727,22 @@ function bindAddProductButtons() {
   );
 
 }
+
+/* ==================================================
+   SINCRONIZAR HOME COM CARRINHO
+
+   cart.js dispara este evento sempre que
+   o carrinho muda.
+================================================== */
+
+window.addEventListener(
+  "croma:cart-updated",
+  () => {
+
+    renderProductsCatalog();
+
+  }
+);
 
 
 /* ==================================================
