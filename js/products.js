@@ -315,7 +315,7 @@ const PRODUCTS = [
         name: "ÚNICO",
 
         // 0 unidades = SOLD automático
-        stock: 1
+        stock: 2
       }
 
     ]
