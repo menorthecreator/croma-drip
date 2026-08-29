@@ -1448,3 +1448,924 @@ body::-webkit-scrollbar {
   }
 
 }
+
+
+/* =========================
+   FEEDBACK ADICIONADO
+========================= */
+
+.add-product {
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.add-product.is-added {
+  background: #111;
+  color: #fff;
+
+  transform: scale(0.94);
+}
+
+.added-check {
+  font-size: 16px;
+  font-weight: 600;
+
+  line-height: 1;
+}
+
+/* ==================================================
+   SOBRE A CROMA
+================================================== */
+
+.about-croma {
+  width: 100%;
+  min-height: 100vh;
+
+  padding:
+    90px
+    6vw
+    100px;
+
+  background: #111;
+  color: #fff;
+
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* HEADER */
+
+.about-croma-header {
+  width: 100%;
+
+  padding-bottom: 18px;
+  margin-bottom: 80px;
+
+  border-bottom:
+    1px solid
+    rgba(255, 255, 255, 0.18);
+}
+
+
+.about-kicker {
+  display: block;
+
+  font-size: 8px;
+  font-weight: 600;
+
+  letter-spacing: 2.4px;
+
+  color:
+    rgba(255, 255, 255, 0.55);
+}
+
+
+/* CONTEÚDO */
+
+.about-croma-content {
+  flex: 1;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.25fr)
+    minmax(300px, 0.75fr);
+
+  gap: 80px;
+
+  align-items: center;
+}
+
+
+/* TÍTULO */
+
+.about-croma-title h2 {
+  margin: 0;
+
+  font-size:
+    clamp(
+      48px,
+      6.5vw,
+      105px
+    );
+
+  font-weight: 700;
+
+  line-height: 0.88;
+
+  letter-spacing: -4px;
+
+  text-transform: uppercase;
+}
+
+
+/* TEXTO */
+
+.about-croma-text {
+  width: 100%;
+  max-width: 480px;
+
+  justify-self: end;
+}
+
+
+.about-croma-text p {
+  margin:
+    0
+    0
+    26px;
+
+  font-size: 13px;
+  font-weight: 400;
+
+  line-height: 1.75;
+
+  color:
+    rgba(255, 255, 255, 0.72);
+}
+
+
+.about-croma-text strong {
+  color: #fff;
+
+  font-weight: 600;
+}
+
+
+/* FRASE PRINCIPAL */
+
+.about-croma-text
+.about-highlight {
+  margin:
+    40px
+    0;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  line-height: 1.35;
+
+  letter-spacing: 0.4px;
+
+  color: #fff;
+}
+
+
+/* ASSINATURA */
+
+.about-signature {
+  margin-top: 48px;
+
+  padding-top: 18px;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.18);
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  font-size: 8px;
+  font-weight: 600;
+
+  letter-spacing: 1.8px;
+
+  color:
+    rgba(255, 255, 255, 0.65);
+}
+
+
+.about-symbol {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+
+  line-height: 1;
+}
+
+
+/* ==================================================
+   SOBRE A CROMA — TABLET
+================================================== */
+
+@media (max-width: 900px) {
+
+  .about-croma {
+    padding:
+      75px
+      28px
+      85px;
+  }
+
+
+  .about-croma-header {
+    margin-bottom: 60px;
+  }
+
+
+  .about-croma-content {
+    grid-template-columns:
+      1fr
+      1fr;
+
+    gap: 50px;
+  }
+
+
+  .about-croma-title h2 {
+    font-size:
+      clamp(
+        44px,
+        7vw,
+        70px
+      );
+
+    letter-spacing: -3px;
+  }
+
+}
+
+
+/* ==================================================
+   SOBRE A CROMA — MOBILE
+================================================== */
+
+@media (max-width: 700px) {
+
+  .about-croma {
+    width: 100%;
+    min-height: 100svh;
+
+    padding:
+      42px
+      18px
+      46px;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+
+  .about-croma-header {
+    margin-bottom: 34px;
+
+    padding-bottom: 14px;
+  }
+
+
+  .about-kicker {
+    font-size: 7px;
+
+    letter-spacing: 2px;
+  }
+
+
+  .about-croma-content {
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    justify-content: flex-start;
+
+    gap: 34px;
+  }
+
+
+  .about-croma-title h2 {
+    width: 100%;
+
+    margin: 0;
+
+    font-size:
+      clamp(
+        42px,
+        12.5vw,
+        58px
+      );
+
+    line-height: 0.88;
+
+    letter-spacing: -2.6px;
+  }
+
+
+  .about-croma-text {
+    width: 100%;
+    max-width: none;
+  }
+
+
+  .about-croma-text p {
+    width: 100%;
+    max-width: none;
+
+    margin:
+      0
+      0
+      20px;
+
+    font-size: 11px;
+
+    line-height: 1.7;
+  }
+
+
+  .about-croma-text
+  .about-highlight {
+    margin:
+      28px
+      0;
+
+    font-size: 14px;
+
+    line-height: 1.35;
+  }
+
+
+  .about-signature {
+    width: 100%;
+
+    margin-top: 28px;
+
+    padding-top: 15px;
+
+    gap: 10px;
+
+    font-size: 7px;
+
+    letter-spacing: 1.3px;
+  }
+
+
+  .about-symbol {
+    font-size: 17px;
+  }
+
+}
+
+/* ==================================================
+   SOBRE A CROMA — MOBILE PEQUENO
+================================================== */
+
+@media (max-width: 430px) {
+
+  .about-croma {
+    padding:
+      38px
+      14px
+      42px;
+  }
+
+
+  .about-croma-header {
+    margin-bottom: 30px;
+  }
+
+
+  .about-croma-content {
+    gap: 30px;
+  }
+
+
+  .about-croma-title h2 {
+    font-size: 11.5vw;
+
+    line-height: 0.9;
+
+    letter-spacing: -2px;
+  }
+
+
+  .about-croma-text p {
+    font-size: 10px;
+
+    line-height: 1.7;
+  }
+
+
+  .about-croma-text
+  .about-highlight {
+    margin:
+      24px
+      0;
+
+    font-size: 13px;
+  }
+
+
+  .about-signature {
+    margin-top: 24px;
+
+    font-size: 6.5px;
+  }
+
+}
+
+
+/* ==================================================
+   CROMA DRIP — RESPONSIVIDADE MOBILE FINAL
+   Header mais confortável + catálogo legível
+   + Sobre a Croma mais equilibrado
+================================================== */
+
+@media (max-width: 700px) {
+
+  .header {
+    height: 78px;
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  .logo {
+    width: 42px;
+  }
+
+  .header-right {
+    gap: 17px;
+  }
+
+  .icon-button {
+    width: 23px;
+    height: 23px;
+  }
+
+  .account-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .cart-icon {
+    width: 25px;
+    height: 25px;
+  }
+
+  .menu-button {
+    width: 28px;
+    height: 23px;
+  }
+
+  .menu-button span {
+    height: 2px;
+  }
+
+  .hero {
+    height: 100svh;
+    min-height: 620px;
+  }
+
+  .hero-content {
+    top: 69%;
+  }
+
+  .catalog-button {
+    width: 178px;
+    height: 54px;
+    font-size: 11px;
+  }
+
+  .catalogo {
+    width: 100%;
+    min-height: 100svh;
+    padding: 54px 18px 68px;
+  }
+
+  .catalog-header {
+    margin-bottom: 28px;
+    padding-bottom: 18px;
+  }
+
+  .catalog-kicker {
+    margin-bottom: 9px;
+    font-size: 8px;
+    letter-spacing: 2px;
+  }
+
+  .catalog-header h2 {
+    font-size: 28px;
+    line-height: 1;
+    letter-spacing: -1.2px;
+  }
+
+  .products-grid {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 36px 12px;
+  }
+
+  .product-viewer {
+    aspect-ratio: 1 / 1.06;
+  }
+
+  .product-image {
+    width: 84%;
+    height: 84%;
+  }
+
+  .product-info {
+    gap: 9px;
+    padding-top: 12px;
+  }
+
+  .product-text {
+    min-width: 0;
+  }
+
+  .product-text h3 {
+    margin-bottom: 5px;
+    font-size: 10px;
+    line-height: 1.3;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+
+  .product-text p {
+    font-size: 9px;
+    line-height: 1.3;
+  }
+
+  .add-product {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+  }
+
+  .add-product svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .sold-out-label {
+    top: 9px;
+    left: 9px;
+    padding: 6px 8px;
+    font-size: 7px;
+    letter-spacing: 1px;
+  }
+
+  .about-croma {
+    width: 100%;
+    min-height: auto;
+    padding: 48px 18px 56px;
+  }
+
+  .about-croma-header {
+    margin-bottom: 34px;
+    padding-bottom: 14px;
+  }
+
+  .about-kicker {
+    font-size: 7px;
+    letter-spacing: 2px;
+  }
+
+  .about-croma-content {
+    display: flex;
+    flex-direction: column;
+    gap: 34px;
+  }
+
+  .about-croma-title h2 {
+    width: 100%;
+    font-size: clamp(44px, 12vw, 58px);
+    line-height: 0.9;
+    letter-spacing: -2.4px;
+  }
+
+  .about-croma-text {
+    width: 100%;
+    max-width: none;
+  }
+
+  .about-croma-text p {
+    width: 100%;
+    max-width: none;
+    margin: 0 0 22px;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+
+  .about-croma-text .about-highlight {
+    margin: 28px 0;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .about-signature {
+    width: 100%;
+    margin-top: 28px;
+    padding-top: 16px;
+    gap: 10px;
+    font-size: 7px;
+    letter-spacing: 1.3px;
+  }
+
+  .about-symbol {
+    font-size: 17px;
+  }
+
+  .site-footer {
+    padding: 22px 18px;
+    gap: 16px;
+  }
+
+  .footer-copyright,
+  .footer-developer span {
+    font-size: 7px;
+    letter-spacing: 1px;
+  }
+
+  .footer-developer img {
+    width: 48px;
+  }
+}
+
+@media (max-width: 430px) {
+
+  .header {
+    height: 76px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .logo {
+    width: 41px;
+  }
+
+  .header-right {
+    gap: 16px;
+  }
+
+  .icon-button {
+    width: 22px;
+    height: 22px;
+  }
+
+  .account-icon {
+    width: 23px;
+    height: 23px;
+  }
+
+  .cart-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .menu-button {
+    width: 27px;
+    height: 22px;
+  }
+
+  .catalogo {
+    padding: 50px 16px 62px;
+  }
+
+  .catalog-header h2 {
+    font-size: 26px;
+  }
+
+  .products-grid {
+    gap: 32px 10px;
+  }
+
+  .product-image {
+    width: 85%;
+    height: 85%;
+  }
+
+  .product-text h3,
+  .product-text p {
+    font-size: 9px;
+  }
+
+  .add-product {
+    width: 35px;
+    height: 35px;
+    flex-basis: 35px;
+  }
+
+  .about-croma {
+    min-height: auto;
+    padding: 42px 16px 50px;
+  }
+
+  .about-croma-header {
+    margin-bottom: 30px;
+  }
+
+  .about-croma-content {
+    gap: 30px;
+  }
+
+  .about-croma-title h2 {
+    font-size: 11.5vw;
+    line-height: 0.9;
+    letter-spacing: -2px;
+  }
+
+  .about-croma-text p {
+    font-size: 10px;
+  }
+
+  .about-croma-text .about-highlight {
+    margin: 24px 0;
+    font-size: 13px;
+  }
+
+  .about-signature {
+    margin-top: 24px;
+    font-size: 6.5px;
+  }
+
+  .site-footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 16px;
+  }
+
+  .footer-developer {
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 350px) {
+
+  .header {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .header-right {
+    gap: 11px;
+  }
+
+  .logo {
+    width: 38px;
+  }
+
+  .account-icon {
+    display: none;
+  }
+
+  .catalogo {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .products-grid {
+    gap: 28px 8px;
+  }
+
+  .product-text h3,
+  .product-text p {
+    font-size: 8px;
+  }
+
+  .add-product {
+    width: 32px;
+    height: 32px;
+    flex-basis: 32px;
+  }
+
+  .site-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+
+/* ==================================================
+   CROMA DRIP — AJUSTE FINAL SOBRE + FOOTER
+================================================== */
+
+/* FOOTER ESCURO PARA CONTINUIDADE VISUAL */
+.site-footer {
+  background: #111;
+  color: #fff;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.footer-copyright,
+.footer-developer span {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 700px) {
+
+  .about-croma {
+    min-height: 100svh;
+
+    display: flex;
+    flex-direction: column;
+
+    padding:
+      48px
+      18px
+      56px;
+  }
+
+  .about-croma-content {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: flex-start;
+  }
+
+  .site-footer {
+    background: #111;
+    color: #fff;
+
+    border-top:
+      1px solid
+      rgba(255, 255, 255, 0.14);
+  }
+
+}
+
+
+/* ==================================================
+   MOBILE 430px
+================================================== */
+
+@media (max-width: 430px) {
+
+  .about-croma {
+    min-height: 100svh;
+
+    padding:
+      42px
+      16px
+      50px;
+  }
+
+  .site-footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    padding:
+      20px
+      16px;
+  }
+
+}
+
+
+/* ==================================================
+   MOBILE MUITO PEQUENO
+================================================== */
+
+@media (max-width: 350px) {
+
+  .site-footer {
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 12px;
+  }
+
+}
+
+
+
+/* ==================================================
+   CROMA DRIP — FOOTER PRETO
+   Mantém o layout anterior intacto
+================================================== */
+
+.site-footer {
+  background: #111;
+  color: #fff;
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.14);
+}
+
+.footer-copyright,
+.footer-developer span {
+  color:
+    rgba(255, 255, 255, 0.78);
+}
+

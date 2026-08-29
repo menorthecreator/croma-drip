@@ -210,7 +210,7 @@ let selectedSize =
 ================================================== */
 
 document.title =
-  `${product.displayName || product.name} | ${STORE_CONFIG.name}`;
+  `${product.displayName || product.name} | Croma Drip`;
 
 
 /* ==================================================
@@ -294,11 +294,15 @@ function renderGallery() {
 
 
   mainImage.src =
-    images[0].src;
+      images[0].src;
 
-  mainImage.alt =
-    product.name;
+    mainImage.alt =
+      product.name;
 
+    mainImage.onerror = () => {
+      mainImage.onerror = null;
+      mainImage.src = "assets/logo.png";
+    };
 
   thumbnailsContainer.innerHTML =
     "";
@@ -337,6 +341,7 @@ function renderGallery() {
         <img
           src="${image.src}"
           alt="${image.label}"
+          onerror="this.onerror=null;this.src='assets/logo.png';"
         >
       `;
 

@@ -88,6 +88,7 @@ function renderProductsCatalog() {
                 alt="${product.name}"
                 class="product-image"
                 data-front-image="${product.images.front}"
+                onerror="this.onerror=null;this.src='assets/logo.png';"
               >
 
 
@@ -501,7 +502,34 @@ function bindAddProductButtons() {
 
           if (added) {
 
-            openCart();
+            const originalHTML =
+              button.innerHTML;
+
+            button.classList.add(
+              "is-added"
+            );
+
+            button.innerHTML = `
+              <span class="added-check">
+                ✓
+              </span>
+            `;
+
+            setTimeout(
+              () => {
+
+                button.innerHTML =
+                  originalHTML;
+
+                button.classList.remove(
+                  "is-added"
+                );
+
+                openCart();
+
+              },
+              450
+            );
 
           }
 
