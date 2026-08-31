@@ -242,88 +242,90 @@ const PRODUCTS = [
 
 
   /* ==================================================
-     NØ CAP VOL.02
-  ================================================== */
+   CROMA FURACÃO
+================================================== */
 
-  {
-    id: "no-cap-vol02",
+{
+  id: "croma-furacao",
 
-    name: "Nø Cap Vol.02",
+  name: "Croma Furacão",
 
-    displayName: "NØ CAP VOL.02",
+  displayName: "CROMA FURACÃO",
 
-    category: "CROMA DRIP",
+  category: "CROMA DRIP",
 
-    price: 129.90,
-
-
-    /* --------------------------------------------------
-       Continua visível mesmo estando SOLD.
-    -------------------------------------------------- */
-
-    active: true,
-
-    trackStock: true,
+  price: 299.90,
 
 
-    images: {
+  /* --------------------------------------------------
+     Continua visível mesmo estando SOLD.
+  -------------------------------------------------- */
 
-      front:
-        "assets/produtos/no-cap-vol02/front.png",
+  active: true,
 
-      side:
-        "assets/produtos/no-cap-vol02/side.png",
-
-      back:
-        "assets/produtos/no-cap-vol02/back.png"
-
-    },
+  trackStock: true,
 
 
-    viewerImages: [
+  images: {
 
-      "assets/produtos/no-cap-vol02/side.png",
+    front:
+      "assets/produtos/croma-furacao/front.png",
 
-      "assets/produtos/no-cap-vol02/front.png",
+    side:
+      "assets/produtos/croma-furacao/side.png",
 
-      "assets/produtos/no-cap-vol02/back.png"
+    back:
+      "assets/produtos/croma-furacao/detail.png"
 
-    ],
-
-
-    description:
-      "Nø Cap Vol.02 com construção premium, acabamento Croma Drip e fechamento regulável.",
-
-
-    details: {
-
-      material: "Sarja premium",
-
-      height: "17 cm",
-
-      circumference: "58 a 62 cm",
-
-      size: "Único ajustável"
-
-    },
+  },
 
 
-    sizes: [
+  viewerImages: [
 
-      {
-        id: "unico",
-        name: "ÚNICO",
+    "assets/produtos/croma-furacao/front.png",
 
-        // 0 unidades = SOLD automático
-        stock: 2
-      }
+    "assets/produtos/croma-furacao/side.png",
 
-    ]
+    "assets/produtos/croma-furacao/detail.png"
 
-  }
+  ],
+
+
+  description:
+    "Croma Furacão confeccionada em tecido rico em elastano, proporcionando maior capacidade e flexibilidade. Uma peça autoral com bordado exclusivo e acabamento Croma Drip.",
+
+
+  details: {
+
+    material: "Tecido com elastano",
+
+    dimensions: "33 × 23 cm",
+
+    internalPockets: "Bolsos internos",
+
+    externalPocket: "Bolso externo com zíper de 20 cm",
+
+    embroidery: "Bordado exclusivo"
+
+  },
+
+
+  sizes: [
+
+    {
+      id: "unico",
+
+      name: "ÚNICO",
+
+      // 0 unidades = SOLD automático
+      stock: 0
+    }
+
+  ]
+
+}
 
 ];
-
 
 /* ==================================================
    BUSCAR PRODUTO PELO ID
