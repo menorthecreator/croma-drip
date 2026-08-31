@@ -1,4 +1,5 @@
-﻿const express = require("express");
+﻿const orderRoutes = require("./routes/orderRoutes");
+const express = require("express");
 const cors = require("cors");
 
 const productRoutes = require("./routes/productRoutes");
@@ -10,6 +11,7 @@ app.use(express.json());
 
 // Produtos
 app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
 
 // Rota principal
 app.get("/", (req, res) => {

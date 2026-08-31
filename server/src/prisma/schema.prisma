@@ -49,3 +49,38 @@ model InventoryMovement {
 
   createdAt   TimestamptzString @default(now())
 }
+
+model Order {
+  id            Int               @id @default(autoincrement())
+  code          String            @unique
+  status        String            @default("pending")
+  subtotal      Decimal
+  total         Decimal
+  customerName  String?
+  customerEmail String?
+  customerPhone String?
+
+  items         OrderItem[]
+
+  createdAt     TimestamptzString @default(now())
+  updatedAt     temporal.updatedAtString()
+}
+
+model OrderItem {
+  id          Int               @id @default(autoincrement())
+  orderId     Int
+  productId   Int
+  variantId   Int
+
+  productName String
+  variantName String
+  sku         String
+
+  quantity    Int
+  unitPrice   Decimal
+  totalPrice  Decimal
+
+  order       Order             @relation(fields: [orderId], references: [id])
+
+  createdAt   TimestamptzString @default(now())
+}
