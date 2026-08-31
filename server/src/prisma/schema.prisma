@@ -1,21 +1,47 @@
 // use prisma-next
 
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  username  String?
-  name      String?
-  posts     Post[]
-  createdAt TimestamptzString @default(now())
-  updatedAt temporal.updatedAtString()
+model Product {
+  id          Int              @id @default(autoincrement())
+  slug        String           @unique
+  name        String
+  displayName String
+  description String?
+  category    String
+  price       Decimal
+  material    String?
+  active      Boolean          @default(true)
+  trackStock  Boolean          @default(true)
+
+  variants    ProductVariant[]
+
+  createdAt   TimestamptzString @default(now())
+  updatedAt   temporal.updatedAtString()
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String?
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
-  createdAt TimestamptzString @default(now())
-  updatedAt temporal.updatedAtString()
+model ProductVariant {
+  id          Int                 @id @default(autoincrement())
+  productId   Int
+  sku         String              @unique
+  name        String
+  stock       Int                 @default(0)
+  active      Boolean             @default(true)
+
+  product     Product             @relation(fields: [productId], references: [id])
+  movements   InventoryMovement[]
+
+  createdAt   TimestamptzString   @default(now())
+  updatedAt   temporal.updatedAtString()
+}
+
+model InventoryMovement {
+  id          Int               @id @default(autoincrement())
+  variantId   Int
+  quantity    Int
+  type        String
+  reason      String?
+  reference   String?
+
+  variant     ProductVariant    @relation(fields: [variantId], references: [id])
+
+  createdAt   TimestamptzString @default(now())
 }
