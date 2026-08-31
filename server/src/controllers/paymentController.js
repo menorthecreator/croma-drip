@@ -1,3 +1,7 @@
+const paymentService =
+  require(
+    "../services/payments/paymentService"
+  );
 async function mockPaymentWebhook(req, res) {
   try {
     const { db } = await import("../prisma/db.mts");
@@ -391,7 +395,189 @@ async function mockPaymentWebhook(req, res) {
     });
   }
 }
+async function createPayment(
+  req,
+  res
+) {
+
+  try {
+
+    const { db } =
+      await import(
+        "../prisma/db.mts"
+      );
+
+    const {
+      orderCode
+    } = req.body;
+
+
+    if (!orderCode) {
+
+      return res
+        .status(400)
+        .json({
+
+          success: false,
+
+          message:
+            "orderCode é obrigatório."
+
+        });
+
+    }
+
+
+    const orders =
+      await db.orm.public.Order.all();
+
+
+    const order =
+      orders.find(
+        item =>
+          item.code ===
+          orderCode
+      );
+
+
+    if (!order) {
+
+      return res
+        .status(404)
+        .json({
+
+          success: false,
+
+          message:
+            "Pedido não encontrado."
+
+        });
+
+    }
+
+
+    if (
+      order.status ===
+      "paid"
+    ) {
+
+      return res
+        .status(409)
+        .json({
+
+          success: false,
+
+          message:
+            "Este pedido já está pago."
+
+        });
+
+    }
+
+
+    const payment =
+      await paymentService
+        .createPayment({
+
+          order,
+
+          customer: {
+
+            name:
+              order.customerName,
+
+            email:
+              order.customerEmail,
+
+            phone:
+              order.customerPhone
+
+          }
+
+        });
+
+
+    const updatedOrder =
+      await db.orm.public.Order
+        .where({
+          id: order.id
+        })
+        .update({
+
+          status:
+            "payment_pending",
+
+          paymentProvider:
+            payment.provider,
+
+          paymentId:
+            payment.paymentId,
+
+          paymentStatus:
+            payment.status
+
+        });
+
+
+    return res
+      .status(201)
+      .json({
+
+        success: true,
+
+        payment,
+
+        order: {
+
+          id:
+            updatedOrder.id,
+
+          code:
+            updatedOrder.code,
+
+          status:
+            updatedOrder.status,
+
+          paymentProvider:
+            updatedOrder
+              .paymentProvider,
+
+          paymentId:
+            updatedOrder
+              .paymentId,
+
+          paymentStatus:
+            updatedOrder
+              .paymentStatus
+
+        }
+
+      });
+
+  } catch (error) {
+
+    console.error(
+      "Erro ao criar pagamento:",
+      error
+    );
+
+
+    return res
+      .status(500)
+      .json({
+
+        success: false,
+
+        message:
+          "Erro ao criar pagamento."
+
+      });
+
+  }
+
+}
 
 module.exports = {
+  createPayment,
   mockPaymentWebhook
 };

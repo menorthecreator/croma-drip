@@ -1,11 +1,26 @@
-const express = require("express");
+const express =
+  require("express");
 
 const {
+  createPayment,
   mockPaymentWebhook
-} = require("../controllers/paymentController");
+} =
+  require(
+    "../controllers/paymentController"
+  );
 
-const router = express.Router();
+const router =
+  express.Router();
 
-router.post("/webhook/mock", mockPaymentWebhook);
+router.post(
+  "/create",
+  createPayment
+);
 
-module.exports = router;
+router.post(
+  "/webhook/mock",
+  mockPaymentWebhook
+);
+
+module.exports =
+  router;
