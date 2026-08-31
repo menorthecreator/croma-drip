@@ -318,24 +318,25 @@ const PRODUCTS = [
   trackStock: true,
 
   images: {
-    front:
-      "assets/produtos/boro-scarz/front.png",
+  front:
+    "assets/produtos/boro-scarz/front.png",
 
-    side:
-      "assets/produtos/boro-scarz/detail-01.png",
+  side:
+    "assets/produtos/boro-scarz/detail-01.png",
 
-    back:
-      "assets/produtos/boro-scarz/detail-02.png"
+  back:
+    "assets/produtos/boro-scarz/back.png"
   },
 
   viewerImages: [
-    "assets/produtos/boro-scarz/front.png",
-    "assets/produtos/boro-scarz/detail-01.png",
-    "assets/produtos/boro-scarz/detail-02.png",
-    "assets/produtos/boro-scarz/detail-03.png",
-    "assets/produtos/boro-scarz/detail-04.png",
-    "assets/produtos/boro-scarz/detail-05.png"
-  ],
+  "assets/produtos/boro-scarz/front.png",
+  "assets/produtos/boro-scarz/back.png",
+  "assets/produtos/boro-scarz/detail-01.png",
+  "assets/produtos/boro-scarz/detail-02.png",
+  "assets/produtos/boro-scarz/detail-03.png",
+  "assets/produtos/boro-scarz/detail-04.png",
+  "assets/produtos/boro-scarz/detail-05.png"
+],
 
   description:
     "Calça Boro Scarz — Cicatrizes Boro. Peça em denim com construção artesanal, recortes, aplicações, rasgos e sobreposições têxteis.",
