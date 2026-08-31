@@ -1,21 +1,25 @@
 // use prisma-next
 
 model Product {
-  id          Int              @id @default(autoincrement())
-  slug        String           @unique
-  name        String
-  displayName String
-  description String?
-  category    String
-  price       Decimal
-  material    String?
-  active      Boolean          @default(true)
-  trackStock  Boolean          @default(true)
+  id           Int              @id @default(autoincrement())
+  slug         String           @unique
+  name         String
+  displayName  String
+  description  String?
+  category     String
+  price        Decimal
+  material     String?
+  active       Boolean          @default(true)
+  trackStock   Boolean          @default(true)
 
-  variants    ProductVariant[]
+  images       Json
+  viewerImages Json
+  details      Json
 
-  createdAt   TimestamptzString @default(now())
-  updatedAt   temporal.updatedAtString()
+  variants     ProductVariant[]
+
+  createdAt    TimestamptzString @default(now())
+  updatedAt    temporal.updatedAtString()
 }
 
 model ProductVariant {

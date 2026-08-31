@@ -148,6 +148,13 @@
                   "kind": "scalar"
                 }
               },
+              "details": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/json@1",
+                  "kind": "scalar"
+                }
+              },
               "displayName": {
                 "nullable": false,
                 "type": {
@@ -159,6 +166,13 @@
                 "nullable": false,
                 "type": {
                   "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "images": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/json@1",
                   "kind": "scalar"
                 }
               },
@@ -203,6 +217,13 @@
                   "codecId": "pg/timestamptz-string@1",
                   "kind": "scalar"
                 }
+              },
+              "viewerImages": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/json@1",
+                  "kind": "scalar"
+                }
               }
             },
             "relations": {
@@ -236,11 +257,17 @@
                 "description": {
                   "column": "description"
                 },
+                "details": {
+                  "column": "details"
+                },
                 "displayName": {
                   "column": "displayName"
                 },
                 "id": {
                   "column": "id"
+                },
+                "images": {
+                  "column": "images"
                 },
                 "material": {
                   "column": "material"
@@ -259,6 +286,9 @@
                 },
                 "updatedAt": {
                   "column": "updatedAt"
+                },
+                "viewerImages": {
+                  "column": "viewerImages"
                 }
               },
               "namespaceId": "public",
@@ -507,6 +537,11 @@
                   "nativeType": "text",
                   "nullable": true
                 },
+                "details": {
+                  "codecId": "pg/json@1",
+                  "nativeType": "json",
+                  "nullable": false
+                },
                 "displayName": {
                   "codecId": "pg/text@1",
                   "nativeType": "text",
@@ -519,6 +554,11 @@
                     "kind": "function"
                   },
                   "nativeType": "int4",
+                  "nullable": false
+                },
+                "images": {
+                  "codecId": "pg/json@1",
+                  "nativeType": "json",
                   "nullable": false
                 },
                 "material": {
@@ -553,6 +593,11 @@
                 "updatedAt": {
                   "codecId": "pg/timestamptz-string@1",
                   "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "viewerImages": {
+                  "codecId": "pg/json@1",
+                  "nativeType": "json",
                   "nullable": false
                 }
               },
@@ -677,7 +722,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "33910da859746d18bc5d449d6f938ae433a07e717677aa284cf33d8508342b40"
+    "storageHash": "edfbf445a08b16dd39d47288690d11c42622c69b8b680e374dfe31e7f52a6113"
   },
   "execution": {
     "executionHash": "9efd81946468818eb67077ecfdc6cfc7b96788d9723bbfea7271ac29b4330bda",
