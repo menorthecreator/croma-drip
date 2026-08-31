@@ -15,7 +15,6 @@ async function createOrder(req, res) {
     const variants = await db.orm.public.ProductVariant.all();
 
     const preparedItems = [];
-
     let subtotal = 0;
 
     for (const item of items) {
@@ -133,6 +132,7 @@ async function createOrder(req, res) {
         total: Number(order.total)
       }
     });
+
   } catch (error) {
     console.error("Erro ao criar pedido:", error);
 
@@ -143,6 +143,73 @@ async function createOrder(req, res) {
   }
 }
 
+async function getOrderByCode(req, res) {
+  try {
+    const { db } = await import("../prisma/db.mts");
+
+    const { code } = req.params;
+
+    const orders = await db.orm.public.Order.all();
+    const orderItems = await db.orm.public.OrderItem.all();
+
+    const order = orders.find(
+      (item) => item.code === code
+    );
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Pedido não encontrado."
+      });
+    }
+
+    const items = orderItems
+      .filter((item) => item.orderId === order.id)
+      .map((item) => ({
+        productId: item.productId,
+        variantId: item.variantId,
+        productName: item.productName,
+        variantName: item.variantName,
+        sku: item.sku,
+        quantity: Number(item.quantity),
+        unitPrice: Number(item.unitPrice),
+        totalPrice: Number(item.totalPrice)
+      }));
+
+    return res.status(200).json({
+      success: true,
+
+      order: {
+        id: order.id,
+        code: order.code,
+        status: order.status,
+
+        customer: {
+          name: order.customerName,
+          email: order.customerEmail,
+          phone: order.customerPhone
+        },
+
+        subtotal: Number(order.subtotal),
+        total: Number(order.total),
+
+        items,
+
+        createdAt: order.createdAt
+      }
+    });
+
+  } catch (error) {
+    console.error("Erro ao buscar pedido:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Erro ao buscar pedido."
+    });
+  }
+}
+
 module.exports = {
-  createOrder
+  createOrder,
+  getOrderByCode
 };

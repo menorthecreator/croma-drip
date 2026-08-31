@@ -170,6 +170,41 @@
                   "kind": "scalar"
                 }
               },
+              "inventoryProcessed": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "paidAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "paymentId": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "paymentProvider": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "paymentStatus": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "status": {
                 "nullable": false,
                 "type": {
@@ -235,6 +270,21 @@
                 },
                 "id": {
                   "column": "id"
+                },
+                "inventoryProcessed": {
+                  "column": "inventoryProcessed"
+                },
+                "paidAt": {
+                  "column": "paidAt"
+                },
+                "paymentId": {
+                  "column": "paymentId"
+                },
+                "paymentProvider": {
+                  "column": "paymentProvider"
+                },
+                "paymentStatus": {
+                  "column": "paymentStatus"
                 },
                 "status": {
                   "column": "status"
@@ -819,6 +869,35 @@
                   "nativeType": "int4",
                   "nullable": false
                 },
+                "inventoryProcessed": {
+                  "codecId": "pg/bool@1",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nativeType": "bool",
+                  "nullable": false
+                },
+                "paidAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
+                "paymentId": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "paymentProvider": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
+                "paymentStatus": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": true
+                },
                 "status": {
                   "codecId": "pg/text@1",
                   "default": {
@@ -1175,7 +1254,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "8920ccd96030214ebc78008bf1179f9b663b26b8ce8515e1a0d95daf526026ba"
+    "storageHash": "f63bbf96ad024bc5c522c576c6cf1d7e7cf0dc1ef29453838328dfff51516e60"
   },
   "execution": {
     "executionHash": "4730cbc67b383f16c051397e97f1d85a08fd014bb031f66c18c73a01607053c3",

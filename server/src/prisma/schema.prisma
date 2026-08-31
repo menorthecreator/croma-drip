@@ -1,16 +1,16 @@
 // use prisma-next
 
 model Product {
-  id           Int              @id @default(autoincrement())
-  slug         String           @unique
+  id           Int               @id @default(autoincrement())
+  slug         String            @unique
   name         String
   displayName  String
   description  String?
   category     String
   price        Decimal
   material     String?
-  active       Boolean          @default(true)
-  trackStock   Boolean          @default(true)
+  active       Boolean           @default(true)
+  trackStock   Boolean           @default(true)
 
   images       Json
   viewerImages Json
@@ -51,21 +51,30 @@ model InventoryMovement {
 }
 
 model Order {
-  id            Int               @id @default(autoincrement())
-  code          String            @unique
-  status        String            @default("pending")
-  subtotal      Decimal
-  total         Decimal
-  customerName  String?
-  customerEmail String?
-  customerPhone String?
+  id                 Int               @id @default(autoincrement())
+  code               String            @unique
 
-  items         OrderItem[]
+  status             String            @default("pending")
 
-  createdAt     TimestamptzString @default(now())
-  updatedAt     temporal.updatedAtString()
+  subtotal           Decimal
+  total              Decimal
+
+  customerName       String?
+  customerEmail      String?
+  customerPhone      String?
+
+  paymentProvider    String?
+  paymentId          String?
+  paymentStatus      String?
+  paidAt             TimestamptzString?
+
+  inventoryProcessed Boolean           @default(false)
+
+  items              OrderItem[]
+
+  createdAt          TimestamptzString @default(now())
+  updatedAt          temporal.updatedAtString()
 }
-
 model OrderItem {
   id          Int               @id @default(autoincrement())
   orderId     Int
