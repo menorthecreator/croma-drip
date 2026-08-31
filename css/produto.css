@@ -206,17 +206,26 @@ body {
 ========================= */
 
 .gallery-thumbnails {
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, 1fr);
-
+  display: flex;
   gap: 12px;
 
   margin-top: 12px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scrollbar-width: none;
+
+  scroll-behavior: smooth;
+}
+
+.gallery-thumbnails::-webkit-scrollbar {
+  display: none;
 }
 
 .thumbnail {
+  flex: 0 0 180px;
+
   height: 105px;
 
   overflow: hidden;
@@ -252,7 +261,6 @@ body {
 .thumbnail.active {
   border-color: #111;
 }
-
 
 /* =========================
    DETAILS
@@ -790,26 +798,31 @@ body {
   /* MINIATURAS */
 
   .gallery-thumbnails {
-    grid-template-columns:
-      repeat(3, 1fr);
+  display: flex;
 
-    gap: 4px;
+  gap: 4px;
 
-    margin-top: 4px;
+  margin-top: 4px;
 
-    padding:
-      0
-      4px;
-  }
+  padding:
+    0
+    4px;
 
-  .thumbnail {
-    height: 82px;
-  }
+  overflow-x: auto;
+  overflow-y: hidden;
 
-  .thumbnail img {
-    padding: 8px;
-  }
+  scrollbar-width: none;
+}
 
+.gallery-thumbnails::-webkit-scrollbar {
+  display: none;
+}
+
+.thumbnail {
+  flex: 0 0 32%;
+
+  height: 82px;
+}
 
   /* DETALHES */
 

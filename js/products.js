@@ -233,7 +233,7 @@ const PRODUCTS = [
         name: "ÚNICO",
 
         // ESTOQUE ATUAL DO NØ CAP VOL.01
-        stock: 8
+        stock: 0
       }
 
     ]
@@ -241,7 +241,7 @@ const PRODUCTS = [
   },
 
 
-  /* ==================================================
+/* ==================================================
    CROMA FURACÃO
 ================================================== */
 
@@ -256,18 +256,11 @@ const PRODUCTS = [
 
   price: 299.90,
 
-
-  /* --------------------------------------------------
-     Continua visível mesmo estando SOLD.
-  -------------------------------------------------- */
-
   active: true,
 
   trackStock: true,
 
-
   images: {
-
     front:
       "assets/produtos/croma-furacao/front.png",
 
@@ -276,65 +269,98 @@ const PRODUCTS = [
 
     back:
       "assets/produtos/croma-furacao/detail.png"
-
   },
 
-
   viewerImages: [
-
     "assets/produtos/croma-furacao/front.png",
-
     "assets/produtos/croma-furacao/side.png",
-
     "assets/produtos/croma-furacao/detail.png"
-
   ],
-
 
   description:
     "Croma Furacão confeccionada em tecido rico em elastano, proporcionando maior capacidade e flexibilidade. Uma peça autoral com bordado exclusivo e acabamento Croma Drip.",
 
-
   details: {
-
     material: "Tecido com elastano",
-
     dimensions: "33 × 23 cm",
-
     internalPockets: "Bolsos internos",
-
     externalPocket: "Bolso externo com zíper de 20 cm",
-
     embroidery: "Bordado exclusivo"
-
   },
 
-
   sizes: [
-
     {
       id: "unico",
-
       name: "ÚNICO",
-
-      // 0 unidades = SOLD automático
       stock: 0
     }
-
   ]
+},
 
+
+/* ==================================================
+   BORO SCARZ
+================================================== */
+
+{
+  id: "boro-scarz",
+
+  name: "Calça Boro Scarz - Cicatrizes Boro",
+
+  displayName: "CALÇA BORO SCARZ",
+
+  category: "CROMA DRIP",
+
+  price: 790,
+
+  active: true,
+
+  trackStock: true,
+
+  images: {
+    front:
+      "assets/produtos/boro-scarz/front.png",
+
+    side:
+      "assets/produtos/boro-scarz/detail-01.png",
+
+    back:
+      "assets/produtos/boro-scarz/detail-02.png"
+  },
+
+  viewerImages: [
+    "assets/produtos/boro-scarz/front.png",
+    "assets/produtos/boro-scarz/detail-01.png",
+    "assets/produtos/boro-scarz/detail-02.png",
+    "assets/produtos/boro-scarz/detail-03.png",
+    "assets/produtos/boro-scarz/detail-04.png",
+    "assets/produtos/boro-scarz/detail-05.png"
+  ],
+
+  description:
+    "Calça Boro Scarz — Cicatrizes Boro. Peça em denim com construção artesanal, recortes, aplicações, rasgos e sobreposições têxteis.",
+
+  details: {
+    material: "Denim",
+    construction: "Patchwork / Boro",
+    finish: "Distressed artesanal",
+    size: "A definir"
+  },
+
+  sizes: [
+    {
+      id: "unico",
+      name: "ÚNICO",
+      stock: 1
+    }
+  ]
 }
 
 ];
 
+
 /* ==================================================
    BUSCAR PRODUTO PELO ID
-
-   Exemplo:
-
-   getProductById("no-cap-vol01")
-
-   Retorna o objeto completo daquele produto.
 ================================================== */
 
 function getProductById(productId) {
@@ -345,7 +371,6 @@ function getProductById(productId) {
   );
 
 }
-
 
 /* ==================================================
    PRODUTOS ATIVOS

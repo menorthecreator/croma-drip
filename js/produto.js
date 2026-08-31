@@ -297,36 +297,73 @@ function renderGallery() {
   }
 
 
-  const images = [
+  /* ==================================================
+     GALERIA DO PRODUTO
 
-    {
-      src:
-        product.images.front,
+     Prioridade:
+     1. viewerImages
+     2. images.front / side / back
 
-      label:
-        "Frente"
-    },
+     Assim produtos antigos continuam funcionando
+     normalmente, e produtos com várias fotos podem
+     exibir todos os detalhes.
+  ================================================== */
 
-    {
-      src:
-        product.images.side,
+  let images = [];
 
-      label:
-        "Lateral"
-    },
 
-    {
-      src:
-        product.images.back,
+  if (
+    Array.isArray(product.viewerImages) &&
+    product.viewerImages.length > 0
+  ) {
 
-      label:
-        "Traseira"
-    }
+    images =
+      product.viewerImages
+        .filter(Boolean)
+        .map(
+          (src, index) => ({
+            src,
+            label:
+              index === 0
+                ? "Imagem principal"
+                : `Detalhe ${index}`
+          })
+        );
 
-  ].filter(
-    image =>
-      Boolean(image.src)
-  );
+  } else {
+
+    images = [
+
+      {
+        src:
+          product.images?.front,
+
+        label:
+          "Frente"
+      },
+
+      {
+        src:
+          product.images?.side,
+
+        label:
+          "Lateral"
+      },
+
+      {
+        src:
+          product.images?.back,
+
+        label:
+          "Traseira"
+      }
+
+    ].filter(
+      image =>
+        Boolean(image.src)
+    );
+
+  }
 
 
   if (
@@ -336,7 +373,9 @@ function renderGallery() {
   }
 
 
-  /* Imagem principal */
+  /* ==================================================
+     IMAGEM PRINCIPAL
+  ================================================== */
 
   mainImage.src =
     images[0].src;
@@ -344,8 +383,6 @@ function renderGallery() {
   mainImage.alt =
     product.name;
 
-
-  /* Fallback caso a imagem não exista */
 
   mainImage.onerror = () => {
 
@@ -356,6 +393,10 @@ function renderGallery() {
 
   };
 
+
+  /* ==================================================
+     MINIATURAS
+  ================================================== */
 
   thumbnailsContainer.innerHTML =
     "";
@@ -390,13 +431,35 @@ function renderGallery() {
       );
 
 
-      button.innerHTML = `
-        <img
-          src="${image.src}"
-          alt="${image.label}"
-          onerror="this.onerror=null;this.src='assets/logo.png';"
-        >
-      `;
+      const thumbnailImage =
+        document.createElement(
+          "img"
+        );
+
+
+      thumbnailImage.src =
+        image.src;
+
+
+      thumbnailImage.alt =
+        `${product.name} - ${image.label}`;
+
+
+      thumbnailImage.onerror =
+        () => {
+
+          thumbnailImage.onerror =
+            null;
+
+          thumbnailImage.src =
+            "assets/logo.png";
+
+        };
+
+
+      button.appendChild(
+        thumbnailImage
+      );
 
 
       button.addEventListener(
@@ -421,7 +484,6 @@ function renderGallery() {
   );
 
 }
-
 
 /* ==================================================
    TROCAR IMAGEM
