@@ -216,7 +216,6 @@ body {
 
 .hero-video {
   position: absolute;
-
   inset: 0;
 
   width: 100%;
@@ -225,8 +224,31 @@ body {
   object-fit: cover;
   object-position: center;
 
-  z-index: 1;
+  z-index: 0;
+
+  /* evita aparecer borda durante o movimento */
+  transform: scale(1.04);
+
+  animation: cromaHeroMotion 14s ease-in-out infinite alternate;
+
+  will-change: transform;
 }
+
+
+/* MOVIMENTO CINEMATOGRÁFICO */
+
+@keyframes cromaHeroMotion {
+
+  0% {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: scale(1.11) translate3d(-0.8%, -0.4%, 0);
+  }
+
+}
+
 /* =========================
    HERO
 ========================= */
@@ -2405,3 +2427,23 @@ body::-webkit-scrollbar {
     rgba(255, 255, 255, 0.78);
 }
 
+
+@media (max-width: 768px) {
+
+  .hero-video {
+    animation: cromaHeroMotionMobile 14s ease-in-out infinite alternate;
+  }
+
+  @keyframes cromaHeroMotionMobile {
+
+    0% {
+      transform: scale(1.05);
+    }
+
+    100% {
+      transform: scale(1.09);
+    }
+
+  }
+
+}
