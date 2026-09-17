@@ -355,6 +355,60 @@ const PRODUCTS = [
       stock: 1
     }
   ]
+},
+
+/* ==================================================
+   DIAMANTE CINZA
+================================================== */
+
+{
+  id: "diamante-cinza",
+
+  name: "Diamante Cinza",
+
+  displayName: "DIAMANTE CINZA",
+
+  category: "CROMA DRIP",
+
+  price: 1125,
+
+  active: true,
+
+  trackStock: true,
+
+  images: {
+    front:
+      "assets/produtos/diamante-cinza/front.png",
+
+    side:
+      "assets/produtos/diamante-cinza/detail-01.png",
+
+    back:
+      "assets/produtos/diamante-cinza/back.png"
+  },
+
+  viewerImages: [
+    "assets/produtos/diamante-cinza/front.png",
+    "assets/produtos/diamante-cinza/back.png",
+    "assets/produtos/diamante-cinza/detail-01.png",
+    "assets/produtos/diamante-cinza/detail-02.png",
+    "assets/produtos/diamante-cinza/detail-03.png"
+  ],
+
+  description:
+    "Bolsa Diamante Cinza — peça autoral Croma Drip.",
+
+  details: {
+    size: "Único"
+  },
+
+  sizes: [
+    {
+      id: "unico",
+      name: "ÚNICO",
+      stock: 1
+    }
+  ]
 }
 
 ];
